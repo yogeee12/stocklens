@@ -3,8 +3,7 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
-import time
-
+import time 
 
 def scrape_stock_reports(symbol_url):
 
@@ -67,7 +66,7 @@ def parse_broker_rows(soup):
 
 if __name__ == "__main__":
 
-    url = "https://trendlyne.com/research-reports/stock/1372/TCS/tata-consultancy-services-ltd/"
+    url = "https://trendlyne.com/research-reports/stock/1127/RELIANCE/reliance-industries-ltd/"
 
     soup = scrape_stock_reports(url)
     data = parse_broker_rows(soup)
