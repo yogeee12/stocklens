@@ -3,7 +3,22 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
-import time 
+import time
+from pathlib import Path
+import pandas as pd
+
+
+def url_finder(url):
+    stock_index = 1127
+    symbol = "RELIANCE"
+    company_name = "reliance-industries-ltd"
+
+    DATA_PATH = Path(__file__).parent / "data" / "nifty500_companies.csv"
+    df = pd.read_csv(DATA_PATH)
+
+    default_url = df.loc[df["detail_url"] == stock_index, "detail_url"]
+    report_url = "https://trendlyne.com/research-reports/stock/"    
+
 
 def scrape_stock_reports(symbol_url):
 
