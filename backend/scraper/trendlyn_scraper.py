@@ -43,7 +43,7 @@ def parse_broker_rows(soup):
         stock = tds[2].find("a").get_text(strip=True) if tds[2].find("a") else None
         ltp = tds[4].get_text(strip=True)
         target = tds[5].get_text(strip=True)
-        price_at_reco_raw = tds[6].get_text(" ", strip=True)  # e.g. "2049.50 (8.57%)"
+        price_at_reco_raw = tds[6].get_text(" ", strip=True) 
         upside = tds[7].get_text(strip=True)
         call_type = tds[8].get_text(strip=True)
 
