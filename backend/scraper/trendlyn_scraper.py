@@ -1,50 +1,27 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
+from database import SessionLocal
+from model import Company, Recommendation
 import time
-from pathlib import Path
-import pandas as pd
-
-
-DATA_PATH = Path(__file__).parent / "data" / "nifty500_companies.csv"
-df = pd.read_csv(DATA_PATH)
-
-# Bulid Url
-def url_finder(symbol:str):
-    symbol = symbol.upper()
-
-    if symbol not in df["symbol"].values:
-        return None
-    
-    row = df.loc[df["symbol"] == symbol, ("company_name","stock_id")].iloc[0]
-
-    company_name = row["company_name"]
-    stock_id = row["stock_id"]
-
-    report_url = f"https://trendlyne.com/research-reports/stock/{stock_id}/{symbol}/{company_name}" 
-    return report_url   
+import random
 
 
 # dwonload the page html
-def scrape_stock_reports(symbol_url):
-
-    # options = Options()
-    # options.add_argument("--headless")
-    # options.add_argument("--disable-gpu")
-
-    driver = webdriver.Chrome(
-        service=Service(ChromeDriverManager().install())#, options=options
-    )
+def scrape_stock_reports(driver ,symbol_url):
 
     driver.get(symbol_url)
+    WebDriverWait(driver, 15).until(
+        EC.presence_of_element_located((By.ID, "brokerTable"))
+    )
 
-    time.sleep(5)
 
     soup = BeautifulSoup(driver.page_source, "html.parser")
-
-    driver.quit()
 
     return soup
 
@@ -71,7 +48,7 @@ def parse_broker_rows(soup):
         call_type = tds[8].get_text(strip=True)
 
         post_link_tag = row.select_one("a.pills:not(.pdf-pill)")
-        report_url = ("https://trendlyn.com" + post_link_tag["href"] if post_link_tag else None)
+        report_url = ("https://trendlyne.com" + post_link_tag["href"] if post_link_tag else None)
 
         results.append({
             "date": date,
@@ -87,18 +64,72 @@ def parse_broker_rows(soup):
 
     return results
 
+def save_to_psql(db, company, data):
+    try:
+        for row in data:
+            exists = db.query(Recommendation).filter_by(
+                    company_id=company.id,
+                    broker=row["broker"],
+                    recommendation_date=row["date"]
+                ).first()
+
+            if exists:
+                continue
+
+            recommendation = Recommendation(
+            company_id = company.id,
+            broker = row["broker"],
+            recommendation_date = row["date"],
+            ltp = row["ltp"],
+            target_price = row["target"],
+            price_at_reco = row["price_at_reco"],
+            upside = row["upside"],
+            call_type = row["call_type"],
+            report_url = row["report_url"]
+            )
+            db.add(recommendation)
+
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise
+    return True
+
 if __name__ == "__main__":
-    count = 0 
-    for i,symbol in enumerate(df["symbol"].values):
-        if i == 5:
-            break   
-        url = url_finder(symbol)
 
-        if url is None:
-            continue
+    db = SessionLocal()
+    companies = db.query(Company).limit(20).all()
 
-        soup = scrape_stock_reports(url)
-        data = parse_broker_rows(soup)
+    options = Options()
+    # options.add_argument("--headless")
+    options.add_argument("--disable-gpu")
 
-        df_result = pd.DataFrame(data)
-        df_result.to_csv(f"{symbol}_report.csv")
+    driver = webdriver.Chrome(
+            service=Service(ChromeDriverManager().install()), options=options
+        )
+    try:
+        for company in companies:
+            if not company.stock_id or not company.symbol:
+                continue
+            try:
+                url = (
+                    f"https://trendlyne.com/research-reports/stock/"
+                    f"{company.stock_id}/"
+                    f"{company.symbol}/"
+                    f"{company.company_name}"
+                )
+                print(f"Scraping {company.symbol}...")
+                soup = scrape_stock_reports(driver,url)
+                data = parse_broker_rows(soup)
+                save_to_psql(db, company, data)
+
+                time.sleep(random.uniform(5,8))
+                print(f"{company.symbol} : {len(data)} recommendation saved")
+
+            except Exception as e:
+                print(f"Failed {company.symbol}: {e}")
+                continue
+
+    finally:
+        driver.quit()
+        db.close()
