@@ -1,9 +1,15 @@
 from fastapi import FastAPI
 from database import SessionLocal
 from model import Company, Recommendation
-
+from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
+app.middleware(
+    CORSMiddleware,
+    allow_origin = ["http://localhost:5173"],
+    allow_methods = ["*"],
+    allow_headers = ["*"],
+)
 
 @app.get("/")
 def home():
