@@ -8,27 +8,34 @@ from pathlib import Path
 import pandas as pd
 
 
-def url_finder(url):
-    stock_index = 1127
-    symbol = "RELIANCE"
-    company_name = "reliance-industries-ltd"
+DATA_PATH = Path(__file__).parent / "data" / "nifty500_companies.csv"
+df = pd.read_csv(DATA_PATH)
 
-    DATA_PATH = Path(__file__).parent / "data" / "nifty500_companies.csv"
-    df = pd.read_csv(DATA_PATH)
+# Bulid Url
+def url_finder(symbol:str):
+    symbol = symbol.upper()
 
-    default_url = df.loc[df["detail_url"] == stock_index, "detail_url"]
-    report_url = "https://trendlyne.com/research-reports/stock/"    
+    if symbol not in df["symbol"].values:
+        return None
+    
+    row = df.loc[df["symbol"] == symbol, ("company_name","stock_id")].iloc[0]
+
+    company_name = row["company_name"]
+    stock_id = row["stock_id"]
+
+    report_url = f"https://trendlyne.com/research-reports/stock/{stock_id}/{symbol}/{company_name}" 
+    return report_url   
 
 
+# dwonload the page html
 def scrape_stock_reports(symbol_url):
 
-    options = Options()
+    # options = Options()
     # options.add_argument("--headless")
     # options.add_argument("--disable-gpu")
 
     driver = webdriver.Chrome(
-        service=Service(ChromeDriverManager().install()),
-        options=options
+        service=Service(ChromeDriverManager().install())#, options=options
     )
 
     driver.get(symbol_url)
@@ -41,6 +48,7 @@ def scrape_stock_reports(symbol_url):
 
     return soup
 
+#Extract data from html and create data
 def parse_broker_rows(soup):
     rows = soup.select("table#brokerTable tbody tr")
     results = []
@@ -63,7 +71,7 @@ def parse_broker_rows(soup):
         call_type = tds[8].get_text(strip=True)
 
         post_link_tag = row.select_one("a.pills:not(.pdf-pill)")
-        report_url = post_link_tag["href"] if post_link_tag else None
+        report_url = ("https://trendlyn.com" + post_link_tag["href"] if post_link_tag else None)
 
         results.append({
             "date": date,
@@ -80,11 +88,17 @@ def parse_broker_rows(soup):
     return results
 
 if __name__ == "__main__":
+    count = 0 
+    for i,symbol in enumerate(df["symbol"].values):
+        if i == 5:
+            break   
+        url = url_finder(symbol)
 
-    url = "https://trendlyne.com/research-reports/stock/1127/RELIANCE/reliance-industries-ltd/"
+        if url is None:
+            continue
 
-    soup = scrape_stock_reports(url)
-    data = parse_broker_rows(soup)
+        soup = scrape_stock_reports(url)
+        data = parse_broker_rows(soup)
 
-    for row in data:
-        print(row)
+        df_result = pd.DataFrame(data)
+        df_result.to_csv(f"{symbol}_report.csv")
