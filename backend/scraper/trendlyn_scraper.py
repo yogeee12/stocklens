@@ -7,7 +7,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 from database import SessionLocal
-from model import Company, Recommendation
+from model import Company, Recommendation, Brokers
+from scraper.utils import clean_percent, clean_price
 import time
 import random
 
@@ -40,33 +41,58 @@ def parse_broker_rows(soup):
         tds = row.find_all("td")
         # tds[0] is hidden, so real data starts at tds[1]
         date = tds[1].get_text(strip=True)
-        stock = tds[2].find("a").get_text(strip=True) if tds[2].find("a") else None
-        ltp = tds[4].get_text(strip=True)
-        target = tds[5].get_text(strip=True)
+        current_price = clean_price(tds[4].get_text(strip=True))
+        target = clean_price(tds[5].get_text(strip=True))
+        upside = clean_percent(tds[7].get_text(strip=True))
         price_at_reco_raw = tds[6].get_text(" ", strip=True) 
-        upside = tds[7].get_text(strip=True)
         call_type = tds[8].get_text(strip=True)
 
-        results.append({
+        parts = price_at_reco_raw.split()
+
+        price_at_reco = None
+        change_at_reco = None
+
+        if len(parts) >= 1:
+            price_at_reco = clean_price(parts[0])
+
+        if len(parts) >= 2:
+            change_at_reco = clean_percent(parts[1])
+
+        result = {
             "date": date,
-            "stock": stock,
             "broker": broker,
-            "ltp": ltp,
+            "current_price": current_price,
             "target": target,
-            "price_at_reco": price_at_reco_raw,
+            "price_at_reco": price_at_reco,
+            "change_at_reco" : change_at_reco,
             "upside": upside,
             "call_type": call_type,
-        })
+        }
+
+        results.append(result)
 
     return results
+
+def get_or_create_broker(db, broker_name):
+    broker = db.query(Brokers).filter_by(name = broker_name).first()
+
+    if broker is None:
+        broker = Brokers(name = broker_name)
+        db.add(broker)
+        db.flush()
+
+    return broker
 
 def save_to_psql(db, company, data):
     try:
         for row in data:
+
+            broker = get_or_create_broker(db, row["broker"])
+
             exists = db.query(Recommendation).filter_by(
-                    company_id=company.id,
-                    broker=row["broker"],
-                    recommendation_date=row["date"]
+                    company_id = company.id,
+                    broker_id = broker.id,
+                    recommendation_date = row["date"]
                 ).first()
 
             if exists:
@@ -74,17 +100,20 @@ def save_to_psql(db, company, data):
 
             recommendation = Recommendation(
             company_id = company.id,
-            broker = row["broker"],
+            broker_id = broker.id,
             recommendation_date = row["date"],
-            ltp = row["ltp"],
+            current_price = row["current_price"],
             target_price = row["target"],
             price_at_reco = row["price_at_reco"],
+            change_at_reco = row["change_at_reco"],
             upside = row["upside"],
             call_type = row["call_type"]
             )
+
             db.add(recommendation)
 
         db.commit()
+
     except Exception:
         db.rollback()
         raise
@@ -93,7 +122,7 @@ def save_to_psql(db, company, data):
 if __name__ == "__main__":
 
     db = SessionLocal()
-    companies = db.query(Company).offset(50).limit(50).all()
+    companies = db.query(Company).limit(10).all()
 
     options = Options()
     # options.add_argument("--headless")
