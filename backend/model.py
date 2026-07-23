@@ -1,10 +1,5 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Date
+from sqlalchemy import Column, Integer, String, ForeignKey, Float
 from database import Base
-from pathlib import Path
-import pandas as pd
-
-DATA_PATH = Path(__file__).parent / "scraper/data" / "nifty500_companies.csv"
-df = pd.read_csv(DATA_PATH)
 
 class Company(Base):
     __tablename__ = "companies"
@@ -15,16 +10,21 @@ class Company(Base):
     stock_id = Column(String, nullable=False)
     company_url = Column(String)
 
+class Brokers(Base):
+    __tablename__ = "brokers"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String, unique=True, nullable=False)
 
 class Recommendation(Base):
-    __tablename__ = "recommendation"
+    __tablename__ = "recommendations"
 
     id = Column(Integer, primary_key=True, index=True)
     company_id = Column(Integer, 
                         ForeignKey("companies.id"), 
                         nullable=True)
     
-    broker = Column(String, nullable=False)
+    broker_id = Column(Integer, ForeignKey("brokers.id") ,nullable=False)
     recommendation_date = Column(String)
     ltp = Column(String)
 
@@ -34,4 +34,16 @@ class Recommendation(Base):
     upside = Column(String)
     call_type = Column(String)
 
-    report_url = Column(String)
+class Summary(Base):
+    __tablename__ = "summary"
+
+    company_id = Column(Integer, ForeignKey("companies.id"), primary_key=True, nullable=False)
+    buy_count = Column(Integer)
+    hold_count = Column(Integer)
+    sell_count = Column(Integer)
+    buy_percent = Column(Float)
+    hold_percent = Column(Float)
+    sell_percent = Column(Float)
+    avg_target = Column(Float, nullable=False)
+    highest_target = Column(Float)
+    lowest_target = Column(Float)
