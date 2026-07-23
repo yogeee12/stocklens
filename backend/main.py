@@ -4,11 +4,14 @@ from model import Company, Recommendation
 from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
-app.middleware(
+app.add_middleware(
     CORSMiddleware,
-    allow_origin = ["http://localhost:5173"],
-    allow_methods = ["*"],
+    allow_origins = [
+        "http://localhost:5173",
+        ],
+    allow_credentials=True,
     allow_headers = ["*"],
+    allow_methods = ["*"],
 )
 
 @app.get("/")
