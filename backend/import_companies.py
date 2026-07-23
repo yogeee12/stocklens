@@ -1,12 +1,12 @@
-from database import engine
-from model import Base
+from database import engine #, SessionLocal
+from model import Base #, Company
 # import pandas as pd
 
 Base.metadata.create_all(bind=engine)
 print("Table Created Successfully!")
 
 # print("Start Inserting data into table!")
-# df = pd.read_csv(r"C:\Users\Om\Desktop\stock_research_platform\stocklens\backend\scraper\data\nifty500_companies.csv")
+# df = pd.read_csv(r"path\stocklens\backend\scraper\data\nifty500_companies.csv")
 
 
 # db  = SessionLocal()
