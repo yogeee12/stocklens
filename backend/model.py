@@ -26,10 +26,11 @@ class Recommendation(Base):
     
     broker_id = Column(Integer, ForeignKey("brokers.id") ,nullable=False)
     recommendation_date = Column(String)
-    ltp = Column(String)
+    current_price = Column(String)
 
     target_price = Column(String)
-    price_at_reco = Column(String)
+    price_at_reco = Column(Float)
+    change_at_reco = Column(Float)
 
     upside = Column(String)
     call_type = Column(String)
