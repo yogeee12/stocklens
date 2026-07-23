@@ -15,7 +15,6 @@ print("Table Created Successfully!")
 #         symbol = row["symbol"],
 #         company_name = row["company_name"],
 #         stock_id = row["stock_id"],
-#         company_url = row["detail_url"]
 #     )
 
 #     db.add(company)

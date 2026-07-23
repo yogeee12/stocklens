@@ -47,9 +47,6 @@ def parse_broker_rows(soup):
         upside = tds[7].get_text(strip=True)
         call_type = tds[8].get_text(strip=True)
 
-        post_link_tag = row.select_one("a.pills:not(.pdf-pill)")
-        report_url = ("https://trendlyne.com" + post_link_tag["href"] if post_link_tag else None)
-
         results.append({
             "date": date,
             "stock": stock,
@@ -59,7 +56,6 @@ def parse_broker_rows(soup):
             "price_at_reco": price_at_reco_raw,
             "upside": upside,
             "call_type": call_type,
-            "report_url": report_url,
         })
 
     return results
@@ -84,8 +80,7 @@ def save_to_psql(db, company, data):
             target_price = row["target"],
             price_at_reco = row["price_at_reco"],
             upside = row["upside"],
-            call_type = row["call_type"],
-            report_url = row["report_url"]
+            call_type = row["call_type"]
             )
             db.add(recommendation)
 
@@ -98,7 +93,7 @@ def save_to_psql(db, company, data):
 if __name__ == "__main__":
 
     db = SessionLocal()
-    companies = db.query(Company).limit(50).all()
+    companies = db.query(Company).offset(50).limit(50).all()
 
     options = Options()
     # options.add_argument("--headless")
