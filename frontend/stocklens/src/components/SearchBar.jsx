@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-function SymbolSearch({companies}){
+function SearchBar({companies}){
     const [query , setQuery]= useState("")
 
     const q = query.toUpperCase();
@@ -18,15 +18,17 @@ function SymbolSearch({companies}){
             <input value={query} onChange={(e) => {
                 setQuery(e.target.value)
             }}/>
+            <div className="search_result">
             <ul>
                 {matches.map((company) => (
-                <li key={company.id} style={{listStyleType : 'None'}}>
+                    <li key={company.id} style={{listStyleType : 'None'}}>
                 {company.symbol} -  {company.name}
                 </li>
             ))}
-         </ul>
+            </ul>
+            </div>
         </div>
     )
 }
 
-export default SymbolSearch
+export default SearchBar

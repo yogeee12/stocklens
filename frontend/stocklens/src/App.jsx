@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-import SymbolSearch from "./SymbolSearch";
+import SearchBar from "./components/SearchBar";
+import NavBar from "./components/Navbar";
+import ThemeToggle from "./components/ThemeToggle";
 
 function App(){
   const [company, setCompanies] = useState([])
@@ -17,14 +19,23 @@ function App(){
 
   return(
     <div>
+      
+      <div className="header">
       <div className="title-header">
-        <h1 ClassName='web-title'>Stocklens</h1>
+        <h1 className='web-title'>Stocklens</h1>
       </div>
-    <div className="search-box header">
-      <SymbolSearch companies={company}/>
+      <div className="search-box">
+      <SearchBar companies={company}/>
       {error && <p style={{ color: 'red' }}>{error}</p>}
-    </div>
-    </div>
+      </div>
+      <div className="navbar_box">
+        <NavBar />
+      </div>
+      <div className="Theme-box">
+        <ThemeToggle />
+      </div>
+      </div>
+      </div>
   )
 }
 
