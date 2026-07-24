@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Float
+from sqlalchemy import Column, Integer, String, ForeignKey, Float, Date
 from database import Base
+from sqlalchemy import UniqueConstraint
 
 class Company(Base):
     __tablename__ = "companies"
@@ -7,7 +8,7 @@ class Company(Base):
     id = Column(Integer, primary_key=True, index=True)
     symbol = Column(String, unique=True, nullable=False)
     company_name = Column(String, nullable=False)
-    stock_id = Column(String, nullable=False)
+    stock_id = Column(String)
     company_url = Column(String)
 
 class Brokers(Base):
@@ -19,20 +20,34 @@ class Brokers(Base):
 class Recommendation(Base):
     __tablename__ = "recommendations"
 
+    __table_args__ = (
+        UniqueConstraint(
+            "company_id",
+            "broker_id",
+            "recommendation_date",
+            name="unique_company_broker_date"
+        ),
+        )
+
+
     id = Column(Integer, primary_key=True, index=True)
     company_id = Column(Integer, 
-                        ForeignKey("companies.id"), 
-                        nullable=True)
+                        ForeignKey("companies.id"),
+                        nullable=False,
+                        index=True)
     
-    broker_id = Column(Integer, ForeignKey("brokers.id") ,nullable=False)
-    recommendation_date = Column(String)
-    current_price = Column(String)
+    broker_id = Column(Integer, 
+                       ForeignKey("brokers.id"),
+                       nullable=False,
+                       index=True)
+    recommendation_date = Column(Date , nullable=False)
+    current_price = Column(Float)
 
-    target_price = Column(String)
+    target_price = Column(Float)
     price_at_reco = Column(Float)
     change_at_reco = Column(Float)
 
-    upside = Column(String)
+    upside = Column(Float)
     call_type = Column(String)
 
 class Summary(Base):
@@ -45,6 +60,6 @@ class Summary(Base):
     buy_percent = Column(Float)
     hold_percent = Column(Float)
     sell_percent = Column(Float)
-    avg_target = Column(Float, nullable=False)
+    avg_target = Column(Float)
     highest_target = Column(Float)
     lowest_target = Column(Float)
