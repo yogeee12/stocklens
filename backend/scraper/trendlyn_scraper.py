@@ -10,6 +10,7 @@ from database import SessionLocal
 from model import Company, Recommendation, Brokers
 from scraper.utils import clean_percent, clean_price
 import time
+from datetime import datetime
 import random
 
 
@@ -61,11 +62,11 @@ def parse_broker_rows(soup):
         result = {
             "date": date,
             "broker": broker,
-            "current_price": current_price,
-            "target": target,
-            "price_at_reco": price_at_reco,
-            "change_at_reco" : change_at_reco,
-            "upside": upside,
+            "current_price": float(current_price) if current_price else None,
+            "target": float(target) if target else None,
+            "price_at_reco": float(price_at_reco) if price_at_reco else None,
+            "change_at_reco" : float(change_at_reco) if change_at_reco else None,
+            "upside": float(upside) if upside else None,
             "call_type": call_type,
         }
 
@@ -89,6 +90,8 @@ def save_to_psql(db, company, data):
 
             broker = get_or_create_broker(db, row["broker"])
 
+            date = datetime.strptime(row["date"], "%d %b %Y").date()
+
             exists = db.query(Recommendation).filter_by(
                     company_id = company.id,
                     broker_id = broker.id,
@@ -98,10 +101,11 @@ def save_to_psql(db, company, data):
             if exists:
                 continue
 
+
             recommendation = Recommendation(
             company_id = company.id,
             broker_id = broker.id,
-            recommendation_date = row["date"],
+            recommendation_date = date,
             current_price = row["current_price"],
             target_price = row["target"],
             price_at_reco = row["price_at_reco"],
@@ -122,7 +126,7 @@ def save_to_psql(db, company, data):
 if __name__ == "__main__":
 
     db = SessionLocal()
-    companies = db.query(Company).limit(10).all()
+    companies = db.query(Company).all()
 
     options = Options()
     # options.add_argument("--headless")
@@ -131,6 +135,7 @@ if __name__ == "__main__":
     driver = webdriver.Chrome(
             service=Service(ChromeDriverManager().install()), options=options
         )
+    counter = 1
     try:
         for company in companies:
             if not company.stock_id or not company.symbol:
@@ -142,13 +147,14 @@ if __name__ == "__main__":
                     f"{company.symbol}/"
                     f"{company.company_name}"
                 )
-                print(f"Scraping {company.symbol}...")
+                print(f"No.: {counter} Scraping {company.symbol}...")
                 soup = scrape_stock_reports(driver,url)
                 data = parse_broker_rows(soup)
                 save_to_psql(db, company, data)
 
                 time.sleep(random.uniform(5,8))
                 print(f"{company.symbol} : {len(data)} recommendation saved")
+                counter += 1
 
             except Exception as e:
                 print(f"Failed {company.symbol}: {e}")
