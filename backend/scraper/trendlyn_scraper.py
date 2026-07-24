@@ -126,7 +126,7 @@ def save_to_psql(db, company, data):
 if __name__ == "__main__":
 
     db = SessionLocal()
-    companies = db.query(Company).all()
+    companies = db.query(Company).limit (10).all()
 
     options = Options()
     # options.add_argument("--headless")

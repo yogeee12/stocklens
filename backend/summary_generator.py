@@ -30,8 +30,12 @@ def generate_summary():
             targets = [r.target_price for r in recommendations if r.target_price is not None]
 
             avg_target = sum(targets) / len(targets) if targets else None
-            highest_target = max(targets) if targets else None
-            lowest_target = min(targets) if targets else None
+            
+            upsides = [r.upside for r in recommendations if r.upside is not None]
+
+            avg_upside = sum(upsides) / len(upsides) if upsides else None
+            highest_upside = max(upsides)
+            lowest_upsides = min(upsides)
 
             summary = (
                 db.query(Summary)
@@ -49,8 +53,7 @@ def generate_summary():
             summary.hold_percent = hold_percent
             summary.sell_percent = sell_percent
             summary.avg_target = avg_target
-            summary.highest_target = highest_target
-            summary.lowest_target = lowest_target
+            summary.avg_upside = avg_upside
 
         db.commit()
 
