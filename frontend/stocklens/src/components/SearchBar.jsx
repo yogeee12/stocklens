@@ -14,14 +14,21 @@ function SearchBar({companies}){
             ).slice(0,10)
 
     return (
-        <div>
-            <input value={query} onChange={(e) => {
+        <div className="search-box">
+            <input
+                className="search_input"
+                type="text" 
+                placeholder="Search Company..."
+                value={query} 
+                onChange={(e) => {
                 setQuery(e.target.value)
             }}/>
-            <div className="search_result">
+            <div className="search-result">
             <ul>
                 {matches.map((company) => (
-                    <li key={company.id} style={{listStyleType : 'None'}}>
+                    <li key={company.id}
+                    style={{listStyleType : 'None'}}
+                    onClick={() => console.log(company.symbol)}>
                 {company.symbol} -  {company.name}
                 </li>
             ))}

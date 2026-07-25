@@ -1,20 +1,24 @@
 import { useState, useEffect } from "react";
+import { getCompanies } from "./services/api";
 import SearchBar from "./components/SearchBar";
 import NavBar from "./components/Navbar";
 import ThemeToggle from "./components/ThemeToggle";
 
 function App(){
-  const [company, setCompanies] = useState([])
+  const [companies, setCompanies] = useState([])
   const [error, setError] = useState('')
   
-  useEffect (() => {
-    fetch(`http://localhost:8000/companies`)
-      .then((res) => {
-        if (!res.ok) throw new Error(`Server respond ${res.status}`);
-        return res.json();
-      })
-    .then((data) => setCompanies(data))
-    .catch((err) => setError(err.message))
+  useEffect(() => {
+      async function loadCompanies() {
+          try {
+              const data = await getCompanies();
+              setCompanies(data);
+          } catch (err) {
+              setError(err.message);
+          }
+      }
+
+      loadCompanies();
   }, []);
 
   return(
@@ -24,8 +28,8 @@ function App(){
       <div className="title-header">
         <h1 className='web-title'>Stocklens</h1>
       </div>
-      <div className="search-box">
-      <SearchBar companies={company}/>
+      <div >
+      <SearchBar companies={companies}/>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       </div>
       <div className="navbar_box">
