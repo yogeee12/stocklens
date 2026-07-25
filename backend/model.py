@@ -61,4 +61,4 @@ class Summary(Base):
     avg_target = Column(Float)
     avg_buy_upside = Column(Float)
     avg_hold_upside = Column(Float)
-    avg_sell_upside = Column(Float)
+    avg_sell_downside = Column(Float)

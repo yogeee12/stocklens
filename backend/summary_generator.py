@@ -37,7 +37,7 @@ def generate_summary():
 
             avg_buy_upside = sum(total_buy) / len(total_buy) if total_buy else None
             avg_hold_upside = sum(total_hold) / len(total_hold) if total_hold else None
-            avg_sell_upside = sum(total_sell) / len(total_sell) if total_sell else None
+            avg_sell_downside = sum(total_sell) / len(total_sell) if total_sell else None
 
             summary = (
                 db.query(Summary)
@@ -58,7 +58,7 @@ def generate_summary():
             summary.avg_target = avg_target
             summary.avg_buy_upside = avg_buy_upside
             summary.avg_hold_upside = avg_hold_upside
-            summary.avg_sell_upside = avg_sell_upside
+            summary.avg_sell_downside = avg_sell_downside
 
         db.commit()
 
