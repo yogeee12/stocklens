@@ -7,6 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 from database import SessionLocal
+from summary_generator import generate_summary
 from model import Company, Recommendation, Brokers
 from scraper.utils import clean_percent, clean_price
 import time
@@ -86,21 +87,31 @@ def get_or_create_broker(db, broker_name):
 
 def save_to_psql(db, company, data):
     try:
+        seen = set()
         for row in data:
 
             broker = get_or_create_broker(db, row["broker"])
 
             date = datetime.strptime(row["date"], "%d %b %Y").date()
+            key = (company.id, broker.id , date)
+
+            if key in seen:
+                print("Duplicate found")
+                continue
+
+            seen.add(key)
 
             exists = db.query(Recommendation).filter_by(
                     company_id = company.id,
                     broker_id = broker.id,
-                    recommendation_date = row["date"]
+                    recommendation_date = date
                 ).first()
 
             if exists:
+                exists.current_price = row["current_price"]
+                exists.change_at_reco = row["change_at_reco"]
+                exists.upside = row["upside"]
                 continue
-
 
             recommendation = Recommendation(
             company_id = company.id,
@@ -121,12 +132,13 @@ def save_to_psql(db, company, data):
     except Exception:
         db.rollback()
         raise
+
     return True
 
 if __name__ == "__main__":
 
     db = SessionLocal()
-    companies = db.query(Company).limit (10).all()
+    companies = db.query(Company).limit (50).all()
 
     options = Options()
     # options.add_argument("--headless")
@@ -159,6 +171,8 @@ if __name__ == "__main__":
             except Exception as e:
                 print(f"Failed {company.symbol}: {e}")
                 continue
+        summary=generate_summary()
+        print(summary)
 
     finally:
         driver.quit()

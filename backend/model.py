@@ -26,10 +26,8 @@ class Recommendation(Base):
             "broker_id",
             "recommendation_date",
             name="unique_company_broker_date"
-        ),
-        )
-
-
+        ),)
+    
     id = Column(Integer, primary_key=True, index=True)
     company_id = Column(Integer, 
                         ForeignKey("companies.id"),
@@ -61,7 +59,6 @@ class Summary(Base):
     hold_percent = Column(Float)
     sell_percent = Column(Float)
     avg_target = Column(Float)
-    avg_upside = Column(Float)
-    highest_upside = Column(Float)
-    lowest_upside = Column(Float)
-    avg_expected_return = Column(Float)
+    avg_buy_upside = Column(Float)
+    avg_hold_upside = Column(Float)
+    avg_sell_upside = Column(Float)

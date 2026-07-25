@@ -30,18 +30,21 @@ def generate_summary():
             targets = [r.target_price for r in recommendations if r.target_price is not None]
 
             avg_target = sum(targets) / len(targets) if targets else None
-            
-            upsides = [r.upside for r in recommendations if r.upside is not None]
 
-            avg_upside = sum(upsides) / len(upsides) if upsides else None
-            highest_upside = max(upsides)
-            lowest_upsides = min(upsides)
+            total_buy = [r.upside for r in recommendations if r.call_type == "Buy" and r.upside is not None]
+            total_hold = [r.upside for r in recommendations if r.call_type == "Hold" and r.upside is not None]
+            total_sell = [r.upside for r in recommendations if r.call_type == "Sell" and r.upside is not None]
+
+            avg_buy_upside = sum(total_buy) / len(total_buy) if total_buy else None
+            avg_hold_upside = sum(total_hold) / len(total_hold) if total_hold else None
+            avg_sell_upside = sum(total_sell) / len(total_sell) if total_sell else None
 
             summary = (
                 db.query(Summary)
                 .filter(Summary.company_id == company.id)
                 .first()
             )
+
             if summary is None:
                 summary = Summary(company_id = company.id)
                 db.add(summary)
@@ -53,7 +56,9 @@ def generate_summary():
             summary.hold_percent = hold_percent
             summary.sell_percent = sell_percent
             summary.avg_target = avg_target
-            summary.avg_upside = avg_upside
+            summary.avg_buy_upside = avg_buy_upside
+            summary.avg_hold_upside = avg_hold_upside
+            summary.avg_sell_upside = avg_sell_upside
 
         db.commit()
 
@@ -63,8 +68,4 @@ def generate_summary():
     finally:
         db.close()
 
-    return("Summary Added.")
-
-if __name__ == "__main__":
-    summary = generate_summary()
-    print(summary)
+    return("Summary updated successfully.")
