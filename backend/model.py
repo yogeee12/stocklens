@@ -9,7 +9,6 @@ class Company(Base):
     symbol = Column(String, unique=True, nullable=False)
     company_name = Column(String, nullable=False)
     stock_id = Column(String)
-    company_url = Column(String)
 
 class Brokers(Base):
     __tablename__ = "brokers"
