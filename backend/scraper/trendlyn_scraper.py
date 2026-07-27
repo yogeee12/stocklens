@@ -138,7 +138,7 @@ def save_to_psql(db, company, data):
 if __name__ == "__main__":
 
     db = SessionLocal()
-    companies = db.query(Company).limit (50).all()
+    companies = db.query(Company).limit(50).all()
 
     options = Options()
     # options.add_argument("--headless")
@@ -162,9 +162,14 @@ if __name__ == "__main__":
                 print(f"No.: {counter} Scraping {company.symbol}...")
                 soup = scrape_stock_reports(driver,url)
                 data = parse_broker_rows(soup)
+
+                if len(data) == 0:
+                    print(f"❌ No recommendations found for {company.symbol}")
+                    continue
+
                 save_to_psql(db, company, data)
 
-                time.sleep(random.uniform(5,8))
+                time.sleep(random.uniform(2,5))
                 print(f"{company.symbol} : {len(data)} recommendation saved")
                 counter += 1
 

@@ -20,12 +20,14 @@ def generate_summary():
             buy_count = sum(1 for r in recommendations if r.call_type == "Buy")
             hold_count = sum(1 for r in recommendations if r.call_type == "Hold")
             sell_count = sum(1 for r in recommendations if r.call_type == "Sell")
-
+            accumulate_count = sum(1 for r in recommendations if r.call_type == "Accumulate")
             total = len(recommendations)
 
             buy_percent = (buy_count / total) * 100 if total else 0
             hold_percent = (hold_count / total) * 100 if total else 0
             sell_percent = (sell_count / total) * 100 if total else 0
+            accumulate_percent = (accumulate_count / total) * 100 if total else 0
+
 
             targets = [r.target_price for r in recommendations if r.target_price is not None]
 
@@ -34,10 +36,12 @@ def generate_summary():
             total_buy = [r.upside for r in recommendations if r.call_type == "Buy" and r.upside is not None]
             total_hold = [r.upside for r in recommendations if r.call_type == "Hold" and r.upside is not None]
             total_sell = [r.upside for r in recommendations if r.call_type == "Sell" and r.upside is not None]
+            total_accumulate = [r.upside for r in recommendations if r.call_type == "Accumulate" and r.upside is not None]
 
             avg_buy_upside = sum(total_buy) / len(total_buy) if total_buy else None
             avg_hold_upside = sum(total_hold) / len(total_hold) if total_hold else None
             avg_sell_downside = sum(total_sell) / len(total_sell) if total_sell else None
+            avg_accumulate_upside = sum(total_accumulate) / len(total_accumulate) if total_accumulate else None
 
             summary = (
                 db.query(Summary)
@@ -52,13 +56,16 @@ def generate_summary():
             summary.buy_count = buy_count
             summary.hold_count = hold_count
             summary.sell_count = sell_count
+            summary.accumulate_count = accumulate_count
             summary.buy_percent = buy_percent
             summary.hold_percent = hold_percent
             summary.sell_percent = sell_percent
-            summary.avg_target = avg_target
-            summary.avg_buy_upside = avg_buy_upside
-            summary.avg_hold_upside = avg_hold_upside
-            summary.avg_sell_downside = avg_sell_downside
+            summary.accumulate_percent = accumulate_percent
+            summary.avg_target = round(avg_target) if avg_target else None
+            summary.avg_buy_upside = round(avg_buy_upside,2) if avg_buy_upside else None
+            summary.avg_hold_upside = round(avg_hold_upside,2) if avg_hold_upside else None
+            summary.avg_sell_downside = round(avg_sell_downside,2) if avg_sell_downside else None
+            summary.avg_accumulate_upside = round(avg_accumulate_upside,2) if avg_accumulate_upside else None
 
         db.commit()
 

@@ -156,7 +156,7 @@ def get_all_summary():
                     "avg_target" : summary.avg_target,
                     "avg_buy_upside" : summary.avg_buy_upside,
                     "avg_hold_upside" : summary.avg_hold_upside,
-                    "avg_sell_downside" : summary.avg_sell_downside
+                    "avg_sell_downside" : summary.avg_sell_downside,
                 })
             
             return result
@@ -167,7 +167,10 @@ def get_all_summary():
 @app.get("/cards")
 def get_company_cards():
     db = SessionLocal()
-    companies = db.query(Company).all()
+    companies = (
+                db.query(Company)
+                .join(Summary, Company.id == Summary.company_id)
+                .all())
 
     result = []
 
@@ -201,12 +204,17 @@ def get_company_cards():
         result.append({
 
             "company_id": company.id,
-            "company_name": company.company_name,
+            "company_name": company.company_name.replace("-"," ").title(), 
 
             "buy_percent": summary.buy_percent if summary else 0,
             "hold_percent": summary.hold_percent if summary else 0,
             "sell_percent": summary.sell_percent if summary else 0,
+            "accumulate_percent": summary.accumulate_percent if summary else 0,
             "avg_target": summary.avg_target if summary else 0,
+            "avg_buy_upside" : summary.avg_buy_upside,
+            "avg_hold_upside" : summary.avg_hold_upside,
+            "avg_sell_downside" : summary.avg_sell_downside,
+            "avg_accumulate_upside" : summary.avg_accumulate_upside,
 
             "latest_recommendation": {
 
