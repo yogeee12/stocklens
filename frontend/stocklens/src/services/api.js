@@ -14,3 +14,11 @@
     const res = await fetch(`${API}/companies/${symbol}/summary`);
     return res.json();
   }
+  export async function getAllSummary(){
+    const res = await fetch(`${API}/summary`);
+    return res.json();
+  }
+  export async function getCards(){
+    const res = await fetch(`${API}/cards`);
+    return res.json();
+  }
