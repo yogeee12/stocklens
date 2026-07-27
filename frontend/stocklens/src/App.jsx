@@ -17,13 +17,13 @@ function App(){
 
   if(category === "BUY"){
       filteredCompanies = [...summary]
-          .filter(company => company.avg_buy_upside > 0)
+          .filter(company => company.avg_buy_upside !== null)
           .sort((a,b)=> b.avg_buy_upside - a.avg_buy_upside)
           .slice(0,10);}
 
   if(category === "HOLD"){
       filteredCompanies = [...summary]
-          .filter(company => company.avg_hold_upside > 0)
+          .filter(company => company.avg_hold_upside !== null)
           .sort((a,b)=> b.avg_hold_upside - a.avg_hold_upside)
           .slice(0,10);}
           
