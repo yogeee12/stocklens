@@ -5,12 +5,12 @@
     return res.json();
   }
   
-  export async function getRecommendation(){
+  export async function getRecommendations(symbol){
     const res = await fetch(`${API}/companies/${symbol}/recommendations`);
     return res.json();
   }
   
-  export async function getSummary(){
+  export async function getSummary(symbol){
     const res = await fetch(`${API}/companies/${symbol}/summary`);
     return res.json();
   }

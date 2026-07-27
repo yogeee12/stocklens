@@ -141,10 +141,11 @@ code {
     width: 100%;
     position: relative;
     display: flex;
-    align-items: end;
-    justify-content: end;
+    align-items: center;
+    justify-content: center;
 }
 .search-box input{
+  border-radius: 20px;
   width: 80%;
   height: 20px;
   margin: 0px;
@@ -156,16 +157,28 @@ code {
 
 
 .search-result{
+  position: absolute;
+  top: 100%;
+  margin-top: 10px;
   width: 80%;
   justify-self: center;
-  border: 1px solid black;
-  color: black;
-  margin: 0;
-  padding: 12px;
-  list-style-type: None;
-  position: absolute;
+  background: white;
+  border: 1px solid #000;
   z-index: 1000;
-  background-color: #ccc;
-  justify-self: center;
+  cursor: pointer;
   text-align: left;
+  padding: 10px 10px;
 }
+.search-result ul{
+    margin: 0;
+    padding: 0;
+}
+.search-result li{
+    padding: 10px 12px;
+    cursor: pointer;
+}
+
+.search-result li:hover{
+    background: #f2f2f2;
+}
+

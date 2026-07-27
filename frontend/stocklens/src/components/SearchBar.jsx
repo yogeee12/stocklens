@@ -1,8 +1,8 @@
 import { useState } from "react"
 
-function SearchBar({companies}){
+function SearchBar({companies, setSelectedSymbol}){
     const [query , setQuery]= useState("")
-
+    const [showResults, setShowResults] = useState(false)
     const q = query.toUpperCase();
 
     const matches =
@@ -22,18 +22,25 @@ function SearchBar({companies}){
                 value={query} 
                 onChange={(e) => {
                 setQuery(e.target.value)
+                setShowResults(true)
             }}/>
+            {showResults && matches.length > 0 && (
             <div className="search-result">
             <ul>
                 {matches.map((company) => (
                     <li key={company.id}
                     style={{listStyleType : 'None'}}
-                    onClick={() => console.log(company.symbol)}>
+                    onClick={() => {
+                        setQuery("");
+                        setSelectedSymbol(company.symbol)
+                        setShowResults(false);
+                    }}>
                 {company.symbol} -  {company.name}
                 </li>
             ))}
             </ul>
             </div>
+            )}
         </div>
     )
 }
