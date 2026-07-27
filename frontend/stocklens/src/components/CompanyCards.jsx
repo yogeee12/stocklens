@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function CompanyCards({ summary, recommendation=null}) {
+function CompanyCards({ summary, recommendation=null, category}) {
 
     const [open, setOpen] = useState(false);
 
@@ -11,7 +11,7 @@ function CompanyCards({ summary, recommendation=null}) {
                 <h3>{summary.company_name}</h3>
 
                 <div className="call buy">
-                    BUY
+                    {category}
                 </div>
             </div>
 

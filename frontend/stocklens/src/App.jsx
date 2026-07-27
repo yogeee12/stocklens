@@ -29,14 +29,14 @@ function App(){
           
   if(category === "SELL"){
       filteredCompanies = [...summary]
-          .filter(company => company.avg_sell_downside > 0)
+          .filter(company => company.avg_sell_downside !== null)
           .sort((a,b)=> b.avg_sell_downside - a.avg_sell_downside)
           .slice(0,10);}
   console.log(category)
 
   if(category === "ACCUMULATE"){
       filteredCompanies = [...summary]
-          .filter(company => company.avg_accumulate_upside > 0)
+          .filter(company => company.avg_accumulate_upside !== null)
           .sort((a,b)=> b.avg_accumulate_upside - a.avg_accumulate_upside)
           .slice(0,10);}
   console.log(category)
@@ -95,6 +95,7 @@ function App(){
                   key={company.company_id}
                   summary={company}
                   recommendation={company.latest_recommendation}
+                  category={category}
               />
           ))
         }
