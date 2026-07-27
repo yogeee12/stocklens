@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function CompanyCards({ summary, recommendation }) {
+function CompanyCards({ summary, recommendation=null}) {
 
     const [open, setOpen] = useState(false);
 
@@ -11,7 +11,7 @@ function CompanyCards({ summary, recommendation }) {
                 <h3>{summary.company_name}</h3>
 
                 <div className="call buy">
-                    🟢 BUY
+                    BUY
                 </div>
             </div>
 
@@ -33,12 +33,17 @@ function CompanyCards({ summary, recommendation }) {
                 </div>
 
                 <div>
+                    <small>Accumulate</small>
+                    <h4>{summary.accumulate_percent}%</h4>
+                </div>
+
+                <div>
                     <small>Avg Target</small>
                     <h4>₹{summary.avg_target}</h4>
                 </div>
 
                 <div>
-                    <small>Avg Buy</small>
+                    <small>Avg Upside</small>
                     <h4>{summary.avg_buy_upside}%</h4>
                 </div>
 
@@ -48,9 +53,7 @@ function CompanyCards({ summary, recommendation }) {
 
             <div
                 className="recommendation-preview"
-                onClick={() => setOpen(!open)}
-            >
-
+                onClick={() => setOpen(!open)}>
                 <span>{recommendation?.date || "-"}</span>
 
                 <span>{recommendation?.broker || "-"}</span>

@@ -155,7 +155,6 @@ code {
   font-weight: 500;
 }
 
-
 .search-result{
   position: absolute;
   top: 100%;
@@ -190,6 +189,16 @@ code {
 
     margin: 40px auto;
     width: 90%;
+}
+
+.data-theme button{
+  background-color: transparent;
+  display: flex;
+  margin-right: 30px;
+  justify-self: right;
+  align-self: right;
+  border: none;
+  font-size: 1rem;
 }
 
 .category-card{
@@ -241,7 +250,7 @@ code {
     border:1px solid #ccc;
     border-radius:12px;
     padding:18px;
-    background:white;
+    background: var(--bg);
 }
 
 .company-header{
@@ -262,8 +271,8 @@ code {
 
 .summary-grid{
     display:grid;
-    grid-template-columns:repeat(5,1fr);
-    margin:18px 0;
+    grid-template-columns:repeat(6,1fr);
+    margin:16px 0;
     text-align:center;
 }
 
@@ -274,7 +283,7 @@ code {
 
 .summary-grid h4{
     margin:6px 0 0;
-    font-size:20px;
+    font-size:18px;
 }
 
 .recommendation-preview{
@@ -304,5 +313,5 @@ th,td{
 }
 
 th{
-    background:#f5f5f5;
+    background: (var(--bg));
 }
