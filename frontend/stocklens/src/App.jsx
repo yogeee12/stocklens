@@ -11,43 +11,52 @@ function App(){
   const [error, setError] = useState('')
   const [summary, setSummary] = useState([]);
   const [selectedSymbol, setSelectedSymbol] = useState("");
+  // const [selectedCompany , setSelectedCompany] = useState(null)
   const [category, setCategory] = useState("BUY")
-
-  let filteredCompanies = [];
+  const [page, setPage] = useState(1)
+  const ITEM_PER_PAGE = 10
+  let sortedCompanies = [];
+  
+  
+  
+  useEffect(() => {
+      setPage(1);
+    }, [category]);
 
   if(category === "BUY"){
-      filteredCompanies = [...summary]
+      sortedCompanies = [...summary]
           .filter(company =>
-            company.avg_buy_upside != null)
-          .sort((a,b)=> b.avg_buy_upside - a.avg_buy_upside)
-          .slice(0,10);}
+          company.avg_buy_upside != null)
+          .sort((a,b)=> b.avg_buy_upside - a.avg_buy_upside)}
 
-  if(category === "HOLD"){
-      filteredCompanies = [...summary]
+          if(category === "HOLD"){
+      sortedCompanies = [...summary]
           .filter(company =>
-            company.avg_hold_upside != null)
-          .sort((a,b)=> b.avg_hold_upside - a.avg_hold_upside)
-          .slice(0,10);}
+          company.avg_hold_upside != null)
+          .sort((a,b)=> b.avg_hold_upside - a.avg_hold_upside)}
           
   if(category === "SELL"){
-      filteredCompanies = [...summary]
+      sortedCompanies = [...summary]
           .filter(company =>
             company.avg_sell_downside != null)
-          .sort((a,b)=> b.avg_sell_downside - a.avg_sell_downside)
-          .slice(0,10);}
-  console.log(category)
+          .sort((a,b)=> b.avg_sell_downside - a.avg_sell_downside)}
 
   if(category === "ACCUMULATE"){
-      filteredCompanies = [...summary]
+      sortedCompanies = [...summary]
           .filter(company => company.avg_accumulate_upside != null)
-          .sort((a,b)=> b.avg_accumulate_upside - a.avg_accumulate_upside)
-          .slice(0,10);}
-  console.log(category)
+          .sort((a,b)=> b.avg_accumulate_upside - a.avg_accumulate_upside)}
 
+  const start = (page-1) * ITEM_PER_PAGE
+  const end   = start + ITEM_PER_PAGE
+  const filteredCompanies = sortedCompanies.slice(start, end)
+  
+  const totalPages = Math.ceil(
+    sortedCompanies.length / ITEM_PER_PAGE
+  )
   useEffect(() => {
       async function loadCompanies() {
           try {
-              const data = await getCompanies();
+            const data = await getCompanies();
               setCompanies(data);
           } catch (err) {
               setError(err.message);
@@ -92,9 +101,28 @@ function App(){
         setCategory={setCategory}
         />
       </div>
+        <div className="pagination">
+
+          <button
+              disabled={page === 1}
+              onClick={() => setPage(page - 1)}
+          > {`<`}
+          </button>
+
+          <span>
+              Page {page} of {totalPages}
+          </span>
+
+          <button
+              disabled={page === totalPages}
+              onClick={() => setPage(page + 1)}
+          > {`>`}
+          </button>
+
+      </div>
       <div className="company-cards">
         {
-          filteredCompanies.map((company)=>(
+            filteredCompanies.map((company)=>(
               <CompanyCards
                   key={company.company_id}
                   summary={company}

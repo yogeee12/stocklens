@@ -255,6 +255,25 @@ code {
     border-color: #4d3ce7;
 }
 
+/* pagination */
+.pagination button{
+    width: 80px;
+    height: 40px;
+    border: var(--border);
+    border-radius: 10px 20px 0 20px;
+    color: var(--text-h);
+    margin: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: var(--bg)
+}
+.pagination{
+    width: auto;
+    justify-self: center;
+    height: auto;
+    font-size: 16px;
+    font-weight: 600;
+}
 /* Cells */
 .company-card{
     width:95%;
@@ -295,7 +314,7 @@ code {
 
 .summary-grid{
     display:grid;
-    grid-template-columns:repeat(6,1fr);
+    grid-template-columns:repeat(7,1fr);
     margin:16px 0;
     text-align:center;
 }
