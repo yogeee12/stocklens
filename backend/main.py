@@ -123,7 +123,6 @@ def get_summary(symbol : str):
     finally:
         db.close()
 
-
 @app.get("/summary")
 def get_all_summary():
 
@@ -186,26 +185,33 @@ def get_company_cards():
             db.query(Recommendation)
             .filter(Recommendation.company_id == company.id)
             .order_by(Recommendation.recommendation_date.desc())
-            .first()
+            .limit(5)
+            .all()
         )
+        recommendation_list = []
+        for reco in latest_reco:
 
-        broker_name = None
-
-        if latest_reco:
-            broker = (
-                db.query(Brokers)
-                .filter(Brokers.id == latest_reco.broker_id)
-                .first()
-            )
-
+            if reco:
+                broker = (
+                    db.query(Brokers)
+                    .filter(Brokers.id == reco.broker_id)
+                    .first()
+                )
             broker_name = broker.name if broker else None
-
+            recommendation_list.append({
+                    "date": reco.recommendation_date if reco else None,
+                    "broker": broker_name,
+                    "target": reco.target_price if reco else None,
+                    "price_at_reco": reco.price_at_reco if reco else None,
+                    "current_price": reco.current_price if reco else None,
+                    "call": reco.call_type if reco else None,
+                    "upside": reco.upside if reco else None,
+                    "change_at_reco": reco.change_at_reco if reco else None
+            })
 
         result.append({
-
             "company_id": company.id,
             "company_name": company.company_name.replace("-"," ").title(), 
-
             "buy_percent": summary.buy_percent if summary else 0,
             "hold_percent": summary.hold_percent if summary else 0,
             "sell_percent": summary.sell_percent if summary else 0,
@@ -215,32 +221,7 @@ def get_company_cards():
             "avg_hold_upside" : summary.avg_hold_upside,
             "avg_sell_downside" : summary.avg_sell_downside,
             "avg_accumulate_upside" : summary.avg_accumulate_upside,
-
-            "latest_recommendation": {
-
-                "date": latest_reco.recommendation_date
-                if latest_reco else None,
-
-                "broker": broker_name,
-
-                "target": latest_reco.target_price
-                if latest_reco else None,
-
-                "price_at_reco": latest_reco.price_at_reco
-                if latest_reco else None,
-
-                "current_price": latest_reco.current_price
-                if latest_reco else None,
-
-                "call": latest_reco.call_type
-                if latest_reco else None,
-
-                "upside": latest_reco.upside
-                if latest_reco else None,
-
-                "change_at_reco": latest_reco.change_at_reco
-                if latest_reco else None
-            }
+            "recommendations" : recommendation_list,
         })
 
     return result
