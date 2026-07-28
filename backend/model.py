@@ -64,3 +64,7 @@ class Summary(Base):
     avg_hold_upside = Column(Float)
     avg_sell_downside = Column(Float)
     avg_accumulate_upside = Column(Float)
+    buy_score = Column(Integer)
+    hold_score = Column(Integer)
+    sell_score = Column(Integer)
+    accumulate_score = Column(Integer)

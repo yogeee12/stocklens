@@ -221,6 +221,10 @@ def get_company_cards():
             "avg_hold_upside" : summary.avg_hold_upside,
             "avg_sell_downside" : summary.avg_sell_downside,
             "avg_accumulate_upside" : summary.avg_accumulate_upside,
+            "buy_score" : summary.buy_score,
+            "hold_score" : summary.hold_score,
+            "sell_score" : summary.sell_score,
+            "accumulate_score" : summary.accumulate_score,
             "recommendations" : recommendation_list,
         })
 
