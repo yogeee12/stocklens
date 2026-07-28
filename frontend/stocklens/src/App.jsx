@@ -17,14 +17,8 @@ function App(){
   const ITEM_PER_PAGE = 10
   let sortedCompanies = [];
   
-  
-  
-  useEffect(() => {
-      setPage(1);
-    }, [category]);
-
   if(category === "BUY"){
-      sortedCompanies = [...summary]
+    sortedCompanies = [...summary]
           .filter(company =>
           company.avg_buy_upside != null)
           .sort((a,b)=> b.avg_buy_upside - a.avg_buy_upside)}
@@ -53,10 +47,15 @@ function App(){
   const totalPages = Math.ceil(
     sortedCompanies.length / ITEM_PER_PAGE
   )
+
+  useEffect(() => {
+      setPage(1);
+    }, [category]);
+
   useEffect(() => {
       async function loadCompanies() {
-          try {
-            const data = await getCompanies();
+        try {
+          const data = await getCompanies();
               setCompanies(data);
           } catch (err) {
               setError(err.message);

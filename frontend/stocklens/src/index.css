@@ -257,7 +257,7 @@ code {
 
 /* pagination */
 .pagination button{
-    width: 80px;
+    width: 60px;
     height: 40px;
     border: var(--border);
     border-radius: 10px 20px 0 20px;
