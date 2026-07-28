@@ -64,6 +64,10 @@ function CompanyCards({ summary, recommendations=[], category}) {
                     <small>Avg Target</small>
                     <h4>₹{summary.avg_target}</h4>
                 </div>
+                <div>
+                    <small>Todays Price</small>
+                    <h4>₹{recommendations[0]?.current_price}</h4>
+                </div>
 
                 <div>
                     <small>Avg {category === "SELL" ? "Downside" : "Upside"}</small>
