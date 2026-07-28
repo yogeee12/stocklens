@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function CompanyCards({ summary, recommendation=null, category}) {
+function CompanyCards({ summary, recommendations=[], category}) {
 
     const [open, setOpen] = useState(false);
 
@@ -10,7 +10,7 @@ function CompanyCards({ summary, recommendation=null, category}) {
             <div className="company-header">
                 <h3>{summary.company_name}</h3>
 
-                <div className="call buy">
+                <div className={`call ${category}`}>
                     {category}
                 </div>
             </div>
@@ -43,7 +43,7 @@ function CompanyCards({ summary, recommendation=null, category}) {
                 </div>
 
                 <div>
-                    <small>Avg Upside</small>
+                    <small>Avg {category === "SELL" ? "Downside" : "Upside"}</small>
                     <h4>{summary.avg_buy_upside}%</h4>
                 </div>
 
@@ -54,20 +54,20 @@ function CompanyCards({ summary, recommendation=null, category}) {
             <div
                 className="recommendation-preview"
                 onClick={() => setOpen(!open)}>
-                <span>{recommendation?.date || "-"}</span>
+                <span>{recommendations[0]?.date || "-"}</span>
 
-                <span>{recommendation?.broker || "-"}</span>
+                <span>{recommendations[0]?.broker || "-"}</span>
 
                 <span>
-                    ₹{recommendation?.target || "-"}
+                    ₹{recommendations[0]?.target || "-"}
                 </span>
 
                 <span>
-                    {recommendation?.call || "-"}
+                    {recommendations[0]?.call || "-"}
                 </span>
 
                 <span>
-                    {recommendation?.upside || "-"}%
+                    {recommendations[0]?.upside || "-"}%
                 </span>
 
                 <span className="arrow">
@@ -76,7 +76,7 @@ function CompanyCards({ summary, recommendation=null, category}) {
 
             </div>
 
-            {open && recommendation &&(
+            {open && recommendations &&(
 
                 <table>
 
@@ -94,17 +94,18 @@ function CompanyCards({ summary, recommendation=null, category}) {
                     </thead>
 
                     <tbody>
-
-                        <tr>
-                            <td>{recommendation?.date || "-"}</td>
-                            <td>{recommendation?.broker || "-"}</td>
-                            <td>₹{recommendation?.target || "-"}</td>
-                            <td>₹{recommendation?.price_at_reco || "-"}</td>
-                            <td>₹{recommendation?.current_price || "-"}</td>
-                            <td>{recommendation?.call || "-"}</td>
-                            <td>{recommendation?.upside || "-"}%</td>
-                            <td>{recommendation?.change_at_reco || "-"}%</td>
+                        {recommendations.map((reco, index) => 
+                        <tr key={index}>
+                            <td>{reco.date}</td>
+                            <td>{reco.broker}</td>
+                            <td>₹{reco.target}</td>
+                            <td>₹{reco.price_at_reco}</td>
+                            <td>₹{reco.current_price}</td>
+                            <td>{reco.call}</td>
+                            <td>{reco.upside}%</td>
+                            <td>{reco.change_at_reco}%</td>
                         </tr>
+                        )}
 
                     </tbody>
 

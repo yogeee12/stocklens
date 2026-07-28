@@ -85,6 +85,7 @@ function App(){
       </div>
       <div className="hero-section"> 
         <CategoryCards 
+        category={category}
         setCategory={setCategory}
         />
       </div>
@@ -94,7 +95,7 @@ function App(){
               <CompanyCards
                   key={company.company_id}
                   summary={company}
-                  recommendation={company.latest_recommendation}
+                  recommendations={company.recommendations}
                   category={category}
               />
           ))

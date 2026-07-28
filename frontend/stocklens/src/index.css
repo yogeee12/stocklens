@@ -3,6 +3,7 @@
   --text-h: #000;
   --bg: #fff;
   --border: #000;
+  --card: #cecece;
   --code-bg: #fff;
   --accent: #aa3bff;
   --accent-bg: rgba(170, 59, 255, 0.1);
@@ -111,7 +112,7 @@ code {
 }
 [data-theme="dark"]{
 
-    --bg:#000;
+    --bg:hsl(0, 0%, 23%);
     --text:white;
     --card:#000;
     --text-h:#ffffff;
@@ -161,7 +162,7 @@ code {
   margin-top: 10px;
   width: 80%;
   justify-self: center;
-  background: white;
+  background: var(--bg);
   border: 1px solid #000;
   z-index: 1000;
   cursor: pointer;
@@ -178,7 +179,7 @@ code {
 }
 
 .search-result li:hover{
-    background: #f2f2f2;
+    background: var(--card);
 }
 
 /* Hero Section */
@@ -206,7 +207,7 @@ code {
 
     height: 140px;
 
-    border: 2px solid #444;
+    border: 2px solid #383838;
     border-radius: 16px;
 
     display: flex;
@@ -228,19 +229,30 @@ code {
     transform: translateY(-5px);
 }
 
-.buy{
+.category-card{
+    border: 2px solid var(--border);
+    color: var(--card);
+    transition: 0.2s;
+}
+
+.buy.selected{
     color: #2ecc71;
     border-color: #2ecc71;
 }
 
-.hold{
+.hold.selected{
   color: #f39c12;
   border-color: #f39c12;
 }
 
-.sell{
+.sell.selected{
     color: #e74c3c;
     border-color: #e74c3c;
+}
+
+.accumulate.selected{
+    color: #4d3ce7;
+    border-color: #4d3ce7;
 }
 
 /* Cells */
@@ -264,9 +276,21 @@ code {
     font-size:22px;
 }
 
-.call{
+.call.BUY{
     font-weight:700;
     color:#16a34a;
+}
+.call.HOLD{
+    font-weight:700;
+    color:#f39c12;
+}
+.call.SELL{
+    font-weight:700;
+    color:#e74c3c;
+}
+.call.ACCUMULATE{
+    font-weight:700;
+    color:#4d3ce7;
 }
 
 .summary-grid{
@@ -277,7 +301,7 @@ code {
 }
 
 .summary-grid small{
-    color:gray;
+    color: var(--text);
     display:block;
 }
 
