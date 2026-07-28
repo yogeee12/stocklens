@@ -17,31 +17,30 @@ function App(){
 
   if(category === "BUY"){
       filteredCompanies = [...summary]
-          .filter(company => company.buy_score != null &&
+          .filter(company =>
             company.avg_buy_upside != null)
-          .sort((a,b)=> b.buy_score - a.buy_score)
+          .sort((a,b)=> b.avg_buy_upside - a.avg_buy_upside)
           .slice(0,10);}
 
   if(category === "HOLD"){
       filteredCompanies = [...summary]
-          .filter(company => company.hold_score != null &&
+          .filter(company =>
             company.avg_hold_upside != null)
-          .sort((a,b)=> b.hold_score - a.hold_score)
+          .sort((a,b)=> b.avg_hold_upside - a.avg_hold_upside)
           .slice(0,10);}
           
   if(category === "SELL"){
       filteredCompanies = [...summary]
-          .filter(company => company.sell_score != null &&
+          .filter(company =>
             company.avg_sell_downside != null)
-          .sort((a,b)=> b.sell_score - a.sell_score)
+          .sort((a,b)=> b.avg_sell_downside - a.avg_sell_downside)
           .slice(0,10);}
   console.log(category)
 
   if(category === "ACCUMULATE"){
       filteredCompanies = [...summary]
-          .filter(company => company.accumulate_score !== null &&
-                  company.avg_accumulate_upside != null)
-          .sort((a,b)=> b.accumulate_score - a.accumulate_score)
+          .filter(company => company.avg_accumulate_upside != null)
+          .sort((a,b)=> b.avg_accumulate_upside - a.avg_accumulate_upside)
           .slice(0,10);}
   console.log(category)
 

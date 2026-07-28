@@ -111,8 +111,8 @@ function CompanyCards({ summary, recommendations=[], category}) {
                             <th>At Reco</th>
                             <th>Today</th>
                             <th>Call</th>
-                            <th>Upside</th>
-                            <th>Change</th>
+                            <th>{category === "SELL" ? "Downside" : "Upside"}</th>
+                            <th>Change Since Reco</th>
                         </tr>
                     </thead>
 
