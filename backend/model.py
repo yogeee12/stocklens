@@ -45,6 +45,7 @@ class Recommendation(Base):
     change_at_reco = Column(Float)
 
     upside = Column(Float)
+    upside_status = Column(String)
     call_type = Column(String)
 
 class Summary(Base):

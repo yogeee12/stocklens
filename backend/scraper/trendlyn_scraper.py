@@ -67,7 +67,8 @@ def parse_broker_rows(soup):
             "target": float(target) if target else None,
             "price_at_reco": float(price_at_reco) if price_at_reco else None,
             "change_at_reco" : float(change_at_reco) if change_at_reco else None,
-            "upside": float(upside) if upside else None,
+            "upside": float(upside) if isinstance(upside, float) else None,
+            "upside_status": upside if isinstance(upside, str) else None,
             "call_type": call_type,
         }
 
@@ -75,6 +76,7 @@ def parse_broker_rows(soup):
 
     return results
 
+# Get Broker or create broker id , name for broker data parallel
 def get_or_create_broker(db, broker_name):
     broker = db.query(Brokers).filter_by(name = broker_name).first()
 
@@ -85,6 +87,7 @@ def get_or_create_broker(db, broker_name):
 
     return broker
 
+# Save Data to PostgreSQL
 def save_to_psql(db, company, data):
     try:
         seen = set()
@@ -122,9 +125,10 @@ def save_to_psql(db, company, data):
             price_at_reco = row["price_at_reco"],
             change_at_reco = row["change_at_reco"],
             upside = row["upside"],
+            upside_status = row["upside_status"],
             call_type = row["call_type"]
             )
-
+            print(row["upside_status"])
             db.add(recommendation)
 
         db.commit()
@@ -138,7 +142,7 @@ def save_to_psql(db, company, data):
 if __name__ == "__main__":
 
     db = SessionLocal()
-    companies = db.query(Company).all()
+    companies = db.query(Company).limit(1).all()
 
     options = Options()
     # options.add_argument("--headless")
