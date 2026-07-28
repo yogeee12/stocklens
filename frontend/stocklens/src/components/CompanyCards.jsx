@@ -4,6 +4,29 @@ function CompanyCards({ summary, recommendations=[], category}) {
 
     const [open, setOpen] = useState(false);
 
+    let avgValue;
+
+    switch (category) {
+        case "BUY":
+            avgValue = summary.avg_buy_upside;
+            break;
+
+        case "HOLD":
+            avgValue = summary.avg_hold_upside;
+            break;
+
+        case "SELL":
+            avgValue = summary.avg_sell_downside;
+            break;
+
+        case "ACCUMULATE":
+            avgValue = summary.avg_accumulate_upside;
+            break;
+
+        default:
+            avgValue = "-";
+         }
+
     return (
         <div className="company-card">
 
@@ -44,7 +67,7 @@ function CompanyCards({ summary, recommendations=[], category}) {
 
                 <div>
                     <small>Avg {category === "SELL" ? "Downside" : "Upside"}</small>
-                    <h4>{summary.avg_buy_upside}%</h4>
+                    <h4>{avgValue ?? "-" }%</h4>
                 </div>
 
             </div>
