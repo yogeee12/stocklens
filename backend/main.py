@@ -198,6 +198,10 @@ def get_company_cards():
                     .first()
                 )
             broker_name = broker.name if broker else None
+            
+            if not reco.upside:
+                continue
+                
             recommendation_list.append({
                     "date": reco.recommendation_date if reco else None,
                     "broker": broker_name,
@@ -244,7 +248,7 @@ def get_company_cards():
             "buy_percent": round(summary.buy_percent,2) if summary else 0,
             "hold_percent": round(summary.hold_percent,2) if summary else 0,
             "sell_percent": round(summary.sell_percent,2) if summary else 0,
-            "accumulate_percent": round(summary.accumulate_percent, 2) if summary else 0,
+            "accumulate_percent": round(summary.accumulate_percent,) if summary else 0,
             "avg_target": summary.avg_target if summary else 0,
             "avg_buy_upside" : summary.avg_buy_upside,
             "avg_hold_upside" : summary.avg_hold_upside,
