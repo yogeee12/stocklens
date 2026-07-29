@@ -211,6 +211,7 @@ def get_company_cards():
 
         result.append({
             "company_id": company.id,
+            "symbol" : company.symbol,
             "company_name": company.company_name.replace("-"," ").title(), 
             "buy_percent": summary.buy_percent if summary else 0,
             "hold_percent": summary.hold_percent if summary else 0,
