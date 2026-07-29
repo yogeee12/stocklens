@@ -20,24 +20,24 @@ function App(){
   if(category === "BUY"){
     sortedCompanies = [...summary]
           .filter(company =>
-          company.avg_buy_upside != null)
+          company.category === "BUY")
           .sort((a,b)=> b.avg_buy_upside - a.avg_buy_upside)}
 
   if(category === "HOLD"){
     sortedCompanies = [...summary]
           .filter(company =>
-          company.avg_hold_upside != null)
+          company.category === "HOLD")
           .sort((a,b)=> b.avg_hold_upside - a.avg_hold_upside)}
           
   if(category === "SELL"){
       sortedCompanies = [...summary]
           .filter(company =>
-            company.avg_sell_downside != null)
+            company.category === "SELL")
           .sort((a,b)=> b.avg_sell_downside - a.avg_sell_downside)}
 
   if(category === "ACCUMULATE"){
       sortedCompanies = [...summary]
-          .filter(company => company.avg_accumulate_upside != null)
+          .filter(company => company.category === "ACCUMULATE")
           .sort((a,b)=> b.avg_accumulate_upside - a.avg_accumulate_upside)}
 
   const start = (page-1) * ITEM_PER_PAGE
@@ -75,7 +75,7 @@ function App(){
       setSelectedSymbol("");
       setCategory(newCategory);
   }
-  
+
   useEffect(() => {
       setPage(1);
     }, [category]);
