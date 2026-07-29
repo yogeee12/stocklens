@@ -32,7 +32,7 @@ def get_company():
         result.append({
             "id" : company.id,
             "symbol" : company.symbol,
-            "name" : company.company_name
+            "name" : company.company_name.replace("-", " ").title()
         })
 
     db.close()
@@ -209,10 +209,38 @@ def get_company_cards():
                     "change_at_reco": reco.change_at_reco if reco else None
             })
 
+        upside_dic = {
+            "avg_buy_upside" : summary.avg_buy_upside,
+            "avg_hold_upside" : summary.avg_hold_upside,
+            "avg_sell_downside" : summary.avg_sell_downside,
+            "avg_accumulate_upside" : summary.avg_accumulate_upside }
+
+        valid_upside = {
+            key: value
+            for key, value in upside_dic.items()
+            if value is not None
+        }
+
+        if valid_upside:
+            max_upside = max(valid_upside, key=valid_upside.get)
+        else:
+            max_upside = None
+            
+        category = None
+        if max_upside == "avg_buy_upside":
+            category = "BUY"
+        elif max_upside == "avg_hold_upside":
+            category = "HOLD"
+        elif max_upside == "avg_sell_downside":
+            category = "SELL"
+        elif max_upside == "avg_accumulate_upside":
+            category = "ACCUMULATE"
+        
         result.append({
             "company_id": company.id,
             "symbol" : company.symbol,
             "company_name": company.company_name.replace("-"," ").title(), 
+            "category" : category,
             "buy_percent": summary.buy_percent if summary else 0,
             "hold_percent": summary.hold_percent if summary else 0,
             "sell_percent": summary.sell_percent if summary else 0,
