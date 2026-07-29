@@ -46,6 +46,7 @@ def parse_broker_rows(soup):
         current_price = clean_price(tds[4].get_text(strip=True))
         target = clean_price(tds[5].get_text(strip=True))
         upside = clean_percent(tds[7].get_text(strip=True))
+        upside_status = tds[7].get_text(strip=True)
         price_at_reco_raw = tds[6].get_text(" ", strip=True) 
         call_type = tds[8].get_text(strip=True)
 
@@ -68,7 +69,7 @@ def parse_broker_rows(soup):
             "price_at_reco": float(price_at_reco) if price_at_reco else None,
             "change_at_reco" : float(change_at_reco) if change_at_reco else None,
             "upside": float(upside) if isinstance(upside, float) else None,
-            "upside_status": upside if isinstance(upside, str) else None,
+            "upside_status": upside_status if isinstance(upside_status, str) else None,
             "call_type": call_type,
         }
 
@@ -114,6 +115,7 @@ def save_to_psql(db, company, data):
                 exists.current_price = row["current_price"]
                 exists.change_at_reco = row["change_at_reco"]
                 exists.upside = row["upside"]
+                exists.upside_status = row["upside_status"]
                 continue
 
             recommendation = Recommendation(
@@ -128,7 +130,7 @@ def save_to_psql(db, company, data):
             upside_status = row["upside_status"],
             call_type = row["call_type"]
             )
-            print(row["upside_status"])
+            
             db.add(recommendation)
 
         db.commit()
@@ -142,7 +144,7 @@ def save_to_psql(db, company, data):
 if __name__ == "__main__":
 
     db = SessionLocal()
-    companies = db.query(Company).limit(1).all()
+    companies = db.query(Company).all()
 
     options = Options()
     # options.add_argument("--headless")
