@@ -5,12 +5,13 @@ import NavBar from "./components/Navbar";
 import ThemeToggle from "./components/ThemeToggle";
 import CategoryCards from "./components/CategoryCards";
 import CompanyCards from "./components/CompanyCards";
+import Pagination from "./components/Pagination";
 
 function App(){
   const [companies, setCompanies] = useState([])
   const [error, setError] = useState('')
   const [summary, setSummary] = useState([]);
-  const [selectedSymbol, setSelectedSymbol] = useState("");
+  const [setSelectedSymbol] = useState("");
   // const [selectedCompany , setSelectedCompany] = useState(null)
   const [category, setCategory] = useState("BUY")
   const [page, setPage] = useState(1)
@@ -23,8 +24,8 @@ function App(){
           company.avg_buy_upside != null)
           .sort((a,b)=> b.avg_buy_upside - a.avg_buy_upside)}
 
-          if(category === "HOLD"){
-      sortedCompanies = [...summary]
+  if(category === "HOLD"){
+    sortedCompanies = [...summary]
           .filter(company =>
           company.avg_hold_upside != null)
           .sort((a,b)=> b.avg_hold_upside - a.avg_hold_upside)}
@@ -100,37 +101,20 @@ function App(){
         setCategory={setCategory}
         />
       </div>
-        <div className="pagination">
-
-          <button
-              disabled={page === 1}
-              onClick={() => setPage(page - 1)}
-          > {`<`}
-          </button>
-
-          <span>
-              Page {page} of {totalPages}
-          </span>
-
-          <button
-              disabled={page === totalPages}
-              onClick={() => setPage(page + 1)}
-          > {`>`}
-          </button>
-
-      </div>
+        <><Pagination page={page} setPage={setPage} totalPages={totalPages}/></>
       <div className="company-cards">
         {
-            filteredCompanies.map((company)=>(
-              <CompanyCards
-                  key={company.company_id}
-                  summary={company}
-                  recommendations={company.recommendations}
-                  category={category}
-              />
+          filteredCompanies.map((company)=>(
+            <CompanyCards
+            key={company.company_id}
+            summary={company}
+            recommendations={company.recommendations}
+            category={category}
+            />
           ))
         }
       </div>
+        <><Pagination page={page} setPage={setPage} totalPages={totalPages}/></>
       </div>
   )
 }
