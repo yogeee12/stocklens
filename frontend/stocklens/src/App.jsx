@@ -11,7 +11,7 @@ function App(){
   const [companies, setCompanies] = useState([])
   const [error, setError] = useState('')
   const [summary, setSummary] = useState([]);
-  const [setSelectedSymbol] = useState("");
+  const [selectedSymbol ,setSelectedSymbol] = useState("");
   // const [selectedCompany , setSelectedCompany] = useState(null)
   const [category, setCategory] = useState("BUY")
   const [page, setPage] = useState(1)
@@ -44,7 +44,16 @@ function App(){
   const start = (page-1) * ITEM_PER_PAGE
   const end   = start + ITEM_PER_PAGE
   const filteredCompanies = sortedCompanies.slice(start, end)
-  
+    
+  const searchedCompany = summary.find(
+    company => company.symbol === selectedSymbol
+  )
+  console.log(searchedCompany)
+  const displayCompanies = 
+        searchedCompany
+          ? [searchedCompany]
+          : filteredCompanies;
+
   const totalPages = Math.ceil(
     sortedCompanies.length / ITEM_PER_PAGE
   )
@@ -57,26 +66,29 @@ function App(){
       async function loadCompanies() {
         try {
           const data = await getCompanies();
-              setCompanies(data);
-          } catch (err) {
-              setError(err.message);
-          }
+          setCompanies(data);
+        } catch (err) {
+          setError(err.message);
+        }
       }
       loadCompanies();
-  }, []);
-
-  useEffect(() => {
-    async function loadCards() {
-      try {
-        const data = await getCards();
-        setSummary(data)
-        console.log(data)
+    }, []);
+    
+    useEffect(() => {
+      async function loadCards() {
+        try {
+          const data = await getCards();
+          setSummary(data)
       } catch (err){
         setError(err.message)
       }
     }
     loadCards()
   }, [])
+
+  useEffect(() => {
+    console.log("Selected Symbol:", selectedSymbol);
+}, [selectedSymbol]);
 
   return(
     <div>
@@ -101,10 +113,11 @@ function App(){
         setCategory={setCategory}
         />
       </div>
-        <><Pagination page={page} setPage={setPage} totalPages={totalPages}/></>
+        <>{!searchedCompany &&
+         <Pagination page={page} setPage={setPage} totalPages={totalPages}/>}</>
       <div className="company-cards">
         {
-          filteredCompanies.map((company)=>(
+          displayCompanies.map((company)=>(
             <CompanyCards
             key={company.company_id}
             summary={company}
@@ -114,7 +127,8 @@ function App(){
           ))
         }
       </div>
-        <><Pagination page={page} setPage={setPage} totalPages={totalPages}/></>
+        <>{!searchedCompany && 
+        <Pagination page={page} setPage={setPage} totalPages={totalPages}/>}</>
       </div>
   )
 }

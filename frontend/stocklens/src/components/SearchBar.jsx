@@ -31,6 +31,7 @@ function SearchBar({companies, setSelectedSymbol}){
                     <li key={company.id}
                     style={{listStyleType : 'None'}}
                     onClick={() => {
+                        console.log("Clicked:", company.symbol);
                         setQuery("");
                         setSelectedSymbol(company.symbol)
                         setShowResults(false);
