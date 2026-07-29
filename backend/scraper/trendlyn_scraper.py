@@ -118,6 +118,9 @@ def save_to_psql(db, company, data):
                 exists.upside_status = row["upside_status"]
                 continue
 
+            if row["call_type"] == "Neutral":
+                row["call_type"] = "Hold"
+
             recommendation = Recommendation(
             company_id = company.id,
             broker_id = broker.id,
@@ -130,7 +133,7 @@ def save_to_psql(db, company, data):
             upside_status = row["upside_status"],
             call_type = row["call_type"]
             )
-            
+
             db.add(recommendation)
 
         db.commit()

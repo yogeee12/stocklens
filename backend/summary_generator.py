@@ -34,7 +34,7 @@ def generate_summary():
             avg_target = sum(targets) / len(targets) if targets else None
 
             total_buy = [r.upside for r in recommendations if r.call_type == "Buy" and r.upside is not None]
-            total_hold = [r.upside for r in recommendations if r.call_type == "Hold" and r.upside is not None]
+            total_hold = [r.upside for r in recommendations if (r.call_type == "Hold" or r.call_type == "Neutral") and r.upside is not None]
             total_sell = [r.upside for r in recommendations if r.call_type == "Sell" and r.upside is not None]
             total_accumulate = [r.upside for r in recommendations if r.call_type == "Accumulate" and r.upside is not None]
 
