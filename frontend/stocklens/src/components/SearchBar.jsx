@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-function SearchBar({companies, setSelectedSymbol}){
+function SearchBar({companies, onSelectedSymbol }){
     const [query , setQuery]= useState("")
     const [showResults, setShowResults] = useState(false)
     const q = query.toUpperCase();
@@ -33,7 +33,7 @@ function SearchBar({companies, setSelectedSymbol}){
                     onClick={() => {
                         console.log("Clicked:", company.symbol);
                         setQuery("");
-                        setSelectedSymbol(company.symbol)
+                        onSelectedSymbol(company.symbol)
                         setShowResults(false);
                     }}>
                 {company.symbol} -  {company.name}

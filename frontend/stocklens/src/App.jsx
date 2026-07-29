@@ -12,7 +12,6 @@ function App(){
   const [error, setError] = useState('')
   const [summary, setSummary] = useState([]);
   const [selectedSymbol ,setSelectedSymbol] = useState("");
-  // const [selectedCompany , setSelectedCompany] = useState(null)
   const [category, setCategory] = useState("BUY")
   const [page, setPage] = useState(1)
   const ITEM_PER_PAGE = 10
@@ -58,6 +57,25 @@ function App(){
     sortedCompanies.length / ITEM_PER_PAGE
   )
 
+  function handleCompanySelect(symbol){
+
+      setSelectedSymbol(symbol);
+      
+      const company = summary.find(
+          company => company.symbol === symbol
+      );
+
+       console.log("Found company:", company);
+      if(!company) return;
+      console.log("Backend category:", company.category);
+      setCategory(company.category);
+  }
+
+  function handleCategoryChange(newCategory) {
+      setSelectedSymbol("");
+      setCategory(newCategory);
+  }
+  
   useEffect(() => {
       setPage(1);
     }, [category]);
@@ -88,7 +106,9 @@ function App(){
 
   useEffect(() => {
     console.log("Selected Symbol:", selectedSymbol);
-}, [selectedSymbol]);
+  }, [selectedSymbol]);
+  console.log(searchedCompany?.category);
+  console.log(searchedCompany);
 
   return(
     <div>
@@ -97,7 +117,7 @@ function App(){
         <h1 className='web-title'>Stocklens</h1>
       </div>
       <div className="search-container">
-      <SearchBar companies={companies} setSelectedSymbol={setSelectedSymbol}/>
+      <SearchBar companies={companies} onSelectedSymbol={handleCompanySelect}/>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       </div>
       <div className="navbar_box">
@@ -110,7 +130,7 @@ function App(){
       <div className="hero-section"> 
         <CategoryCards 
         category={category}
-        setCategory={setCategory}
+        setCategory={handleCategoryChange}
         />
       </div>
         <>{!searchedCompany &&
