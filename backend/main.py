@@ -225,7 +225,7 @@ def get_company_cards():
             max_upside = max(valid_upside, key=valid_upside.get)
         else:
             max_upside = None
-            
+
         category = None
         if max_upside == "avg_buy_upside":
             category = "BUY"
@@ -241,10 +241,10 @@ def get_company_cards():
             "symbol" : company.symbol,
             "company_name": company.company_name.replace("-"," ").title(), 
             "category" : category,
-            "buy_percent": summary.buy_percent if summary else 0,
-            "hold_percent": summary.hold_percent if summary else 0,
-            "sell_percent": summary.sell_percent if summary else 0,
-            "accumulate_percent": summary.accumulate_percent if summary else 0,
+            "buy_percent": round(summary.buy_percent,2) if summary else 0,
+            "hold_percent": round(summary.hold_percent,2) if summary else 0,
+            "sell_percent": round(summary.sell_percent,2) if summary else 0,
+            "accumulate_percent": round(summary.accumulate_percent, 2) if summary else 0,
             "avg_target": summary.avg_target if summary else 0,
             "avg_buy_upside" : summary.avg_buy_upside,
             "avg_hold_upside" : summary.avg_hold_upside,
