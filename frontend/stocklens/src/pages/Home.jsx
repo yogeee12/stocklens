@@ -1,0 +1,156 @@
+import { useState, useEffect } from "react";
+import { getCards, getCompanies } from "../services/api";
+import SearchBar from "../components/SearchBar";
+import NavBar from "../components/Navbar";
+import ThemeToggle from "../components/ThemeToggle";
+import CategoryCards from "../components/CategoryCards";
+import CompanyCards from "../components/CompanyCards";
+import Pagination from "../components/Pagination";
+
+function Home(){
+  const [companies, setCompanies] = useState([])
+  const [error, setError] = useState('')
+  const [summary, setSummary] = useState([]);
+  const [selectedSymbol ,setSelectedSymbol] = useState("");
+  const [category, setCategory] = useState("BUY")
+  const [page, setPage] = useState(1)
+  const ITEM_PER_PAGE = 10
+  let sortedCompanies = [];
+  
+  if(category === "BUY"){
+    sortedCompanies = [...summary]
+          .filter(company =>
+          company.category === "BUY")
+          .sort((a,b)=> b.avg_buy_upside - a.avg_buy_upside)}
+
+  if(category === "HOLD"){
+    sortedCompanies = [...summary]
+          .filter(company =>
+          company.category === "HOLD")
+          .sort((a,b)=> b.avg_hold_upside - a.avg_hold_upside)}
+          
+  if(category === "SELL"){
+      sortedCompanies = [...summary]
+          .filter(company =>
+            company.category === "SELL")
+          .sort((a,b)=> b.avg_sell_downside - a.avg_sell_downside)}
+
+  if(category === "ACCUMULATE"){
+      sortedCompanies = [...summary]
+          .filter(company => company.category === "ACCUMULATE")
+          .sort((a,b)=> b.avg_accumulate_upside - a.avg_accumulate_upside)}
+
+  const start = (page-1) * ITEM_PER_PAGE
+  const end   = start + ITEM_PER_PAGE
+  const filteredCompanies = sortedCompanies.slice(start, end)
+    
+  const searchedCompany = summary.find(
+    company => company.symbol === selectedSymbol
+  )
+  console.log(searchedCompany)
+  const displayCompanies = 
+        searchedCompany
+          ? [searchedCompany]
+          : filteredCompanies;
+
+  const totalPages = Math.ceil(
+    sortedCompanies.length / ITEM_PER_PAGE
+  )
+
+  function handleCompanySelect(symbol){
+
+      setSelectedSymbol(symbol);
+      
+      const company = summary.find(
+          company => company.symbol === symbol
+      );
+
+       console.log("Found company:", company);
+      if(!company) return;
+      console.log("Backend category:", company.category);
+      setCategory(company.category);
+  }
+
+  function handleCategoryChange(newCategory) {
+      setSelectedSymbol("");
+      setCategory(newCategory);
+  }
+
+  useEffect(() => {
+      setPage(1);
+    }, [category]);
+
+  useEffect(() => {
+      async function loadCompanies() {
+        try {
+          const data = await getCompanies();
+          setCompanies(data);
+        } catch (err) {
+          setError(err.message);
+        }
+      }
+      loadCompanies();
+    }, []);
+    
+    useEffect(() => {
+      async function loadCards() {
+        try {
+          const data = await getCards();
+          setSummary(data)
+      } catch (err){
+        setError(err.message)
+      }
+    }
+    loadCards()
+  }, [])
+
+  useEffect(() => {
+    console.log("Selected Symbol:", selectedSymbol);
+  }, [selectedSymbol]);
+  console.log(searchedCompany?.category);
+  console.log(searchedCompany);
+
+  return(
+    <div>
+      <div className="header">
+      <div className="title-header">
+        <h1 className='web-title'>Stocklens</h1>
+      </div>
+      <div className="search-container">
+      <SearchBar companies={companies} onSelectedSymbol={handleCompanySelect}/>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      </div>
+      <div className="navbar_box">
+        <NavBar />
+      </div>
+      <div className="Theme-box">
+        <ThemeToggle />
+      </div>
+      </div>
+      <div className="hero-section"> 
+        <CategoryCards 
+        category={category}
+        setCategory={handleCategoryChange}
+        />
+      </div>
+        <>{!searchedCompany &&
+         <Pagination page={page} setPage={setPage} totalPages={totalPages}/>}</>
+      <div className="company-cards">
+        {
+          displayCompanies.map((company)=>(
+            <CompanyCards
+            key={company.company_id}
+            summary={company}
+            recommendations={company.recommendations}
+            category={category}
+            />
+          ))
+        }
+      </div>
+        <>{!searchedCompany && 
+        <Pagination page={page} setPage={setPage} totalPages={totalPages}/>}</>
+      </div>
+  )
+}
+
+export default Home

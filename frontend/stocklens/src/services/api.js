@@ -22,3 +22,8 @@
     const res = await fetch(`${API}/cards`);
     return res.json();
   }
+
+  export async function getBrokerSummary(){
+    const res = await fetch(`${API}/brokers_summary`)
+    return res.json()
+  }
