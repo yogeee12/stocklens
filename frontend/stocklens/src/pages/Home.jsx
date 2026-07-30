@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
 import { getCards, getCompanies } from "../services/api";
-import SearchBar from "../components/SearchBar";
-import NavBar from "../components/Navbar";
-import ThemeToggle from "../components/ThemeToggle";
 import CategoryCards from "../components/CategoryCards";
 import CompanyCards from "../components/CompanyCards";
 import Pagination from "../components/Pagination";
+import Header from "../components/header";
 
 function Home(){
   const [companies, setCompanies] = useState([])
@@ -92,7 +90,7 @@ function Home(){
       loadCompanies();
     }, []);
     
-    useEffect(() => {
+  useEffect(() => {
       async function loadCards() {
         try {
           const data = await getCards();
@@ -112,20 +110,8 @@ function Home(){
 
   return(
     <div>
-      <div className="header">
-      <div className="title-header">
-        <h1 className='web-title'>Stocklens</h1>
-      </div>
-      <div className="search-container">
-      <SearchBar companies={companies} onSelectedSymbol={handleCompanySelect}/>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      </div>
-      <div className="navbar_box">
-        <NavBar />
-      </div>
-      <div className="Theme-box">
-        <ThemeToggle />
-      </div>
+      <div>
+        <Header companies={companies} error={error} onSelectedSymbol={handleCompanySelect}/>        
       </div>
       <div className="hero-section"> 
         <CategoryCards 
