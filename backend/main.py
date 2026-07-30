@@ -284,7 +284,7 @@ def get_broker_summary():
 
             result.append({
                 "broker_name" : broker.name,
-                "Total_recommendations" : broker_summary.total_recommendation,
+                "total_recommendations" : broker_summary.total_recommendation,
                 "target_met" : broker_summary.target_met,
                 "company_in_positive" : broker_summary.company_in_positive,
                 "company_in_negative" : broker_summary.company_in_negative,
