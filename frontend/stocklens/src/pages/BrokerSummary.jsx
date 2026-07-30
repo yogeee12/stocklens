@@ -1,5 +1,6 @@
 import { useState ,useEffect } from "react"
 import { getBrokerSummary } from "../services/api"
+import Header from "../components/header"
 
 function BrokerSummary(){
     const [brokers, SetBrokers] = useState([])
@@ -13,6 +14,7 @@ function BrokerSummary(){
     }, [])
     return(
         <div>
+            <Header />
             <h1>Broker Summary</h1>
 
             <table>

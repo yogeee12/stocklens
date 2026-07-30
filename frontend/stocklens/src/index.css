@@ -124,9 +124,7 @@ code {
     grid-template-columns: 180px 1fr auto 60px;
     align-items: center;
     gap: 2rem;
-
-    padding: 1rem 2rem;
-
+    padding: 2rem 2rem;
     border-bottom: 1px solid #444;
     border-radius: 10px;
     box-shadow: #918c8c;
@@ -180,6 +178,19 @@ code {
 
 .search-result li:hover{
     background: var(--card);
+}
+
+.navbar{
+    width: 20%;
+    display: grid;
+    grid-template-columns:repeat(2,1fr);
+    margin: 10px;
+}
+.navbar a{
+    color: black;
+    margin-right: 10px;
+    font-weight: 500;
+    text-decoration: none;
 }
 
 /* Hero Section */

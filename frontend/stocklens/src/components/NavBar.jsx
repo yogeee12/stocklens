@@ -5,7 +5,6 @@ function NavBar(){
         <div className="navbar">
             <Link to="/">Home</Link>
             <Link to="/brokers">Brokers</Link>
-            <span>Stocks</span>
         </div>
     )
 }
