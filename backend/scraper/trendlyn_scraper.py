@@ -116,10 +116,13 @@ def save_to_psql(db, company, data):
                 exists.change_at_reco = row["change_at_reco"]
                 exists.upside = row["upside"]
                 exists.upside_status = row["upside_status"]
+                if exists.call_type == "Neutral":
+                    exists.call_type = "Hold"
                 continue
 
             if row["call_type"] == "Neutral":
                 row["call_type"] = "Hold"
+
 
             recommendation = Recommendation(
             company_id = company.id,
