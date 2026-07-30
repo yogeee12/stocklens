@@ -80,3 +80,7 @@ class Brokers_summary(Base):
     company_in_positive = Column(Integer)
     company_in_negative = Column(Integer)
     active_recommendations = Column(Integer)
+    success_ratio = Column(Float)
+    positive_ratio = Column(Float)
+    bonus_split = Column(Integer)
+    expired = Column(Integer)

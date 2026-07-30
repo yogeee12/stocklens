@@ -288,7 +288,11 @@ def get_broker_summary():
                 "target_met" : broker_summary.target_met,
                 "company_in_positive" : broker_summary.company_in_positive,
                 "company_in_negative" : broker_summary.company_in_negative,
-                "active_recommendations" : broker_summary.active_recommendations
+                "active_recommendations" : broker_summary.active_recommendations,
+                "success_ratio" : broker_summary.success_ratio,
+                "positive_ratio" : broker_summary.positive_ratio,
+                "bonus_split" : broker_summary.bonus_split,
+                "expired" : broker_summary.expired
             })
 
         return result

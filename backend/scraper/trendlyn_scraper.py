@@ -8,6 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 from database import SessionLocal
 from summary_generator import generate_summary
+from broker_summary import broker_summary_genrater
 from model import Company, Recommendation, Brokers
 from scraper.utils import clean_percent, clean_price
 import time
@@ -190,6 +191,8 @@ if __name__ == "__main__":
                 continue
         summary=generate_summary()
         print(summary)
+        broker_summary = broker_summary_genrater()
+        print(broker_summary_genrater)
 
     finally:
         driver.quit()
