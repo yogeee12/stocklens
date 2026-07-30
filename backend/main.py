@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from database import SessionLocal
-from model import Company, Recommendation, Brokers, Summary
+from model import Company, Recommendation, Brokers, Summary, Brokers_summary
 from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
@@ -262,3 +262,36 @@ def get_company_cards():
         })
 
     return result
+
+@app.get('/brokers_summary')
+def get_broker_summary():
+    db = SessionLocal()
+
+    try:
+        brokers = (
+            db.query(Brokers)
+            .all()
+        )
+
+        result = []
+
+        for broker in brokers:
+            broker_summary = (
+                db.query(Brokers_summary)
+                .filter(Brokers_summary.broker_id == broker.id)
+                .first()
+            )
+
+            result.append({
+                "broker_name" : broker.name,
+                "Total_recommendations" : broker_summary.total_recommendation,
+                "target_met" : broker_summary.target_met,
+                "company_in_positive" : broker_summary.company_in_positive,
+                "company_in_negative" : broker_summary.company_in_negative,
+                "active_recommendations" : broker_summary.active_recommendations
+            })
+
+        return result
+    
+    finally:
+        db.close()

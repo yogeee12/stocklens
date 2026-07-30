@@ -69,3 +69,14 @@ class Summary(Base):
     hold_score = Column(Integer)
     sell_score = Column(Integer)
     accumulate_score = Column(Integer)
+
+
+class Brokers_summary(Base):
+    __tablename__ = "brokers_summary"
+
+    broker_id = Column(Integer, ForeignKey('brokers.id'), primary_key=True)
+    total_recommendation = Column(Integer)
+    target_met = Column(Integer)
+    company_in_positive = Column(Integer)
+    company_in_negative = Column(Integer)
+    active_recommendations = Column(Integer)
