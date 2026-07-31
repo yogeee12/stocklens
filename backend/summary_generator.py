@@ -17,11 +17,12 @@ def generate_summary():
             if not recommendations:
                 continue
 
-            buy_count = sum(1 for r in recommendations if r.call_type == "Buy")
-            hold_count = sum(1 for r in recommendations if r.call_type == "Hold")
-            sell_count = sum(1 for r in recommendations if r.call_type == "Sell")
-            accumulate_count = sum(1 for r in recommendations if r.call_type == "Accumulate")
-            total = len(recommendations)
+            buy_count = sum(1 for r in recommendations if r.call_type == "Buy" and r.upside is not None)
+            hold_count = sum(1 for r in recommendations if r.call_type == "Hold" and r.upside is not None)
+            sell_count = sum(1 for r in recommendations if r.call_type == "Sell" and r.upside is not None)
+            accumulate_count = sum(1 for r in recommendations if r.call_type == "Accumulate" and r.upside is not None)
+
+            total = sum((1 for r in recommendations if r.upside is not None))
 
             buy_percent = (buy_count / total) * 100 if total else 0
             hold_percent = (hold_count / total) * 100 if total else 0
@@ -29,7 +30,7 @@ def generate_summary():
             accumulate_percent = (accumulate_count / total) * 100 if total else 0
 
 
-            targets = [r.target_price for r in recommendations if r.target_price is not None]
+            targets = [r.target_price for r in recommendations if r.target_price is not None and r.upside is not None ]
 
             avg_target = sum(targets) / len(targets) if targets else None
 
@@ -74,7 +75,7 @@ def generate_summary():
         raise
     finally:
         db.close()
-    # print("Summary updated successfully.")
+    print("Summary updated successfully.")
     return("Summary updated successfully.")
 
-# generate_summary()
+generate_summary()
