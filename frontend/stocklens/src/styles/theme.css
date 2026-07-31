@@ -1,8 +1,13 @@
 [data-theme="dark"]{
 
-    --bg:hsl(0, 0%, 23%);
-    --text:white;
-    --card:#000;
-    --text-h:#ffffff;
-    --border: #ffff
+    --bg: white;
+    --text: black;
+    --card : white;
+    --text-h: black;
+    --border: var(--line);
+}
+
+.data-theme button{
+    color: #ffffff;
+    font-size: 2rem;
 }

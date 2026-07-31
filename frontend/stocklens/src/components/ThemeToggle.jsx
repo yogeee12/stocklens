@@ -13,7 +13,7 @@ function ThemeToggle(){
     return(
         <div className="data-theme">
             <button onClick={() => setDarkMode(!darkMode)}>
-            {darkMode ? "☀️" : "🌙"}
+            {`◐`}
             </button>
         </div>
     )

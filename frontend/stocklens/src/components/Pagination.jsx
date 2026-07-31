@@ -5,7 +5,7 @@ function Pagination({ page, setPage, totalPages}){
           <button
               disabled={page === 1}
               onClick={() => setPage(page - 1)}
-          > {`<`}
+          > {`⇦`}
           </button>
 
           <span>
@@ -15,7 +15,7 @@ function Pagination({ page, setPage, totalPages}){
           <button
               disabled={page === totalPages}
               onClick={() => setPage(page + 1)}
-          > {`>`}
+          > {`⇨`}
           </button>
 
       </div>
