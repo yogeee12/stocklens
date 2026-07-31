@@ -2,6 +2,8 @@ from fastapi import FastAPI, HTTPException
 from database import SessionLocal
 from model import Company, Recommendation, Brokers, Summary, Brokers_summary
 from fastapi.middleware.cors import CORSMiddleware
+from apscheduler.schedulers.background import BackgroundScheduler
+
 app = FastAPI()
 
 app.add_middleware(

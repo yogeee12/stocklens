@@ -43,19 +43,6 @@ def generate_summary():
             avg_sell_downside = sum(total_sell) / len(total_sell) if total_sell else None
             avg_accumulate_upside = sum(total_accumulate) / len(total_accumulate) if total_accumulate else None
 
-            buy_score = (buy_percent * avg_buy_upside 
-                         if avg_buy_upside else 0
-                         )/ 100
-            hold_score = (hold_percent * avg_hold_upside 
-                          if avg_hold_upside else 0 
-                          )/ 100
-            sell_score = (sell_percent * avg_sell_downside 
-                          if avg_sell_downside else 0
-                          )/ 100
-            accumulate_score = (accumulate_percent * avg_accumulate_upside 
-                                if avg_accumulate_upside else 0
-                            )/ 100
-
             summary = (
                 db.query(Summary)
                 .filter(Summary.company_id == company.id)
@@ -79,11 +66,7 @@ def generate_summary():
             summary.avg_hold_upside = round(avg_hold_upside,2) if avg_hold_upside else None
             summary.avg_sell_downside = round(avg_sell_downside,2) if avg_sell_downside else None
             summary.avg_accumulate_upside = round(avg_accumulate_upside,2) if avg_accumulate_upside else None
-            summary.buy_score = buy_score
-            summary.hold_score = hold_score
-            summary.sell_score = sell_score
-            summary.accumulate_score = accumulate_score
-        
+                    
         db.commit()
 
     except Exception:

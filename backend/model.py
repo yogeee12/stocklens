@@ -47,7 +47,7 @@ class Recommendation(Base):
     upside = Column(Float)
     upside_status = Column(String)
     call_type = Column(String)
-
+    
 class Summary(Base):
     __tablename__ = "summary"
 
@@ -65,11 +65,6 @@ class Summary(Base):
     avg_hold_upside = Column(Float)
     avg_sell_downside = Column(Float)
     avg_accumulate_upside = Column(Float)
-    buy_score = Column(Integer)
-    hold_score = Column(Integer)
-    sell_score = Column(Integer)
-    accumulate_score = Column(Integer)
-
 
 class Brokers_summary(Base):
     __tablename__ = "brokers_summary"
