@@ -4,6 +4,8 @@ import CategoryCards from "../components/CategoryCards";
 import CompanyCards from "../components/CompanyCards";
 import Pagination from "../components/Pagination";
 import Header from "../components/header";
+import "../styles/category.css"
+import "../styles/cards.css"
 
 function Home(){
   const [companies, setCompanies] = useState([])

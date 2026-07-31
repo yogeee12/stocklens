@@ -41,36 +41,40 @@ function CompanyCards({ summary, recommendations=[], category}) {
             <div className="summary-grid">
 
                 <div>
-                    <small>Buy</small>
+                    <small>BUY</small>
                     <h4>{summary.buy_percent}%</h4>
+                    <div className="bar"></div>
                 </div>
 
                 <div>
-                    <small>Hold</small>
+                    <small>HOLD</small>
                     <h4>{summary.hold_percent}%</h4>
+                    <div className="bar"></div>
                 </div>
 
                 <div>
-                    <small>Sell</small>
+                    <small>SELL</small>
                     <h4>{summary.sell_percent}%</h4>
+                    <div className="bar"></div>
                 </div>
 
                 <div>
-                    <small>Accumulate</small>
+                    <small>ACCUMULATE</small>
                     <h4>{summary.accumulate_percent}%</h4>
+                    <div className="bar"></div>
                 </div>
 
                 <div>
-                    <small>Avg Target</small>
+                    <small>AVG TARGET</small>
                     <h4>₹{summary.avg_target}</h4>
                 </div>
                 <div>
-                    <small>Todays Price</small>
+                    <small>TODAYS PRICE</small>
                     <h4>₹{recommendations[0]?.current_price}</h4>
                 </div>
 
                 <div>
-                    <small>Avg {category === "SELL" ? "Downside" : "Upside"}</small>
+                    <small>AVG {category === "SELL" ? "DOWNSIDE" : "UPSIDE"}</small>
                     <h4>{avgValue ?? "-" }%</h4>
                 </div>
 

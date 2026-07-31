@@ -1,1 +1,8 @@
+[data-theme="dark"]{
 
+    --bg:hsl(0, 0%, 23%);
+    --text:white;
+    --card:#000;
+    --text-h:#ffffff;
+    --border: #ffff
+}
