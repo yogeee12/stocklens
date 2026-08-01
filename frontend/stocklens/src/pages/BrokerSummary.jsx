@@ -1,10 +1,9 @@
-import { useState ,useEffect } from "react"
+import { useState ,useEffect , Fragment } from "react"
 import { getBrokerSummary } from "../services/api"
 import Header from "../components/header"
 
 function BrokerSummary(){
     const [brokers, SetBrokers] = useState([])
-    const [open, setOpen] = useState(false)
     const [selectedBroker, setSelectedBroker] = useState(null)
 
     const sortedBrokers = [...brokers]
@@ -42,7 +41,12 @@ function BrokerSummary(){
                 </thead>
                 <tbody >
                     {sortedBrokers.map(broker => (
-                        <tr key={broker.broker_id}>
+                    <Fragment key={broker.broker_id}>
+                        <tr onClick={() =>
+                            setSelectedBroker(
+                                selectedBroker === broker.broker_id ? null : broker.broker_id
+                            )
+                        }>
                             <td>{broker.broker_name}</td>
                             <td>{broker.total_recommendations}</td>
                             <td>{broker.active_recommendations}</td>
@@ -54,46 +58,45 @@ function BrokerSummary(){
                             <td>%{broker.positive_ratio}</td>
                             <td>%{broker.success_ratio}</td>
                             <td>{broker.last_recommendation_date || "-"}</td>
-                            <td>
-                            <span className="arrow" onClick={() => 
-                            setSelectedBroker(selectedBroker === broker.broker_id 
-                                ? null 
-                                : broker.broker_id)>
-                                setOpen(!open)}>
-                                {open ? "▲" : "▼"}
-                            </span>
-                            </td>
+                            <td>{selectedBroker === broker.broker_id ? "▲" : "▼"}</td>
                         </tr>
-                    ))}
-                </tbody >
-                    {open &&
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Company</th>
-                                    <th>Call Type</th>
-                                    <th>Current Price</th>
-                                    <th>Target Price</th>   
-                                    <th>Upside</th>
-                                    <th>Change Since Reco</th>
-                                    <th>Reco Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {sortedBrokers?.company_list?.map((company, index) =>
-                                    <tr key={index}>
-                                        <td>{company.company_name}</td>
-                                        <td>{company.call_type}</td>
-                                        <td>₹{company.current_price}</td>
-                                        <td>₹{company.target_price}</td>
-                                        <td>{company.upside}%</td>
-                                        <td>{company.change_since_reco}%</td>
-                                        <td>{company.reco_date}</td>
-                                    </tr>
-                                )}
-                            </tbody>
+                        {selectedBroker === broker.broker_id &&
+                        <>
+                          <tr>
+                          <td colSpan="12">
+                          <table>
+                          <thead>
+                            <tr>
+                                <th>Company</th>
+                                <th>Call Type</th>
+                                <th>Current Price</th>
+                                <th>Target Price</th>   
+                                <th>Upside</th>
+                                <th>Change Since Reco</th>
+                                <th>Reco Date</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          {broker.company_list.map((company, index) =>
+                            <tr key={index}>
+                            <td>{company.company_name}</td>
+                            <td>{company.call_type}</td>
+                            <td>₹{company.current_price}</td>
+                            <td>₹{company.target_price}</td>
+                            <td>{company.upside}%</td>
+                            <td>{company.change_at_reco}%</td>
+                            <td>{company.recommendation_date}</td>
+                            </tr>
+                        )}
+                        </tbody>
                         </table>
+                        </td>
+                        </tr>
+                        </>
                     }
+                    </Fragment>
+                ))}
+                </tbody >
             </table>
         </div>
     )
