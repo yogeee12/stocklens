@@ -12,6 +12,7 @@ function BrokerSummary(){
         }
         loadBrokers()
     }, [])
+    
     return(
         <div>
             <Header />
@@ -30,6 +31,7 @@ function BrokerSummary(){
                     <th>Pre-Bonus/Split</th>
                     <th>Postive %</th>
                     <th>Success %</th>
+                    <th>Last Recommendation Date</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -45,6 +47,7 @@ function BrokerSummary(){
                             <td>{broker.bonus_split}</td>
                             <td>%{broker.positive_ratio}</td>
                             <td>%{broker.success_ratio}</td>
+                            <td>{broker.last_recommendation_date || "-"}</td>
                         </tr>
                     ))}
                 </tbody>
