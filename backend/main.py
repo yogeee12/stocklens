@@ -205,13 +205,13 @@ def get_company_cards():
                 continue
                 
             recommendation_list.append({
-                    "date": reco.recommendation_date if reco else None,
+                    "date": reco.recommendation_date if reco.recommendation_date else None,
                     "broker": broker_name,
                     "target": reco.target_price if reco else None,
                     "price_at_reco": reco.price_at_reco if reco else None,
                     "current_price": reco.current_price if reco else None,
                     "call": reco.call_type if reco else None,
-                    "upside": reco.upside if reco else None,
+                    "upside": reco.upside if reco.upside or reco.upside_status == "Pre-Bonus/Split" else None,
                     "change_at_reco": reco.change_at_reco if reco else None
             })
 
@@ -277,6 +277,7 @@ def get_broker_summary():
             broker_summary = (
                 db.query(Brokers_summary)
                 .filter(Brokers_summary.broker_id == broker.id)
+                .order_by(Brokers_summary.last_recommendation_date.desc())
                 .first()
             )
 
@@ -290,7 +291,8 @@ def get_broker_summary():
                 "success_ratio" : broker_summary.success_ratio,
                 "positive_ratio" : broker_summary.positive_ratio,
                 "bonus_split" : broker_summary.bonus_split,
-                "expired" : broker_summary.expired
+                "expired" : broker_summary.expired,
+                "last_recommendation_date" : broker_summary.last_recommendation_date
             })
 
         return result

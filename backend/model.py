@@ -79,3 +79,4 @@ class Brokers_summary(Base):
     positive_ratio = Column(Float)
     bonus_split = Column(Integer)
     expired = Column(Integer)
+    last_recommendation_date = Column(Date)
