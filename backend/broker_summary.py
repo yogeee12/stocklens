@@ -26,6 +26,7 @@ def broker_summary_genrater():
             success_ratio = round(((target_met/(total_recommendations))* 100 ) if target_met else 0.0 , 2)
             positive_ratio = round(((in_positive/active_recommendations)* 100 ) if in_positive else 0.0 , 2)
             last_date = recommendation[0].recommendation_date if recommendation else None
+            
             broker_summary = (
                 db.query(Brokers_summary)
                 .filter(Brokers_summary.broker_id == broker.id)
@@ -47,7 +48,7 @@ def broker_summary_genrater():
             broker_summary.success_ratio = success_ratio
             broker_summary.positive_ratio = positive_ratio
             broker_summary.last_recommendation_date = last_date
-            
+
         db.commit()
 
     except Exception:
