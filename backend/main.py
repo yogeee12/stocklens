@@ -221,6 +221,7 @@ def get_broker_summary():
                 })
                 
             result.append({
+                "broker_id" : broker.id,
                 "broker_name" : broker.name,
                 "total_recommendations" : broker_summary.total_recommendation,
                 "target_met" : broker_summary.target_met,
