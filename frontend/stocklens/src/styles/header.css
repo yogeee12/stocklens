@@ -6,8 +6,8 @@
     padding: 2rem 2rem;
     border-bottom: 1px solid #444;
     border-radius: 10px;
-    box-shadow: #918c8c;
-    background-color: rgba(10,13,16,0.92);
+    box-shadow: var(--shadow);
+    background-color: var(--bg);
 }
 
 .web-title{

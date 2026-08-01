@@ -5,9 +5,10 @@
     --card : white;
     --text-h: black;
     --border: var(--line);
+    --ink: black;
 }
 
 .data-theme button{
-    color: #ffffff;
+    color: var(--ink);
     font-size: 2rem;
 }

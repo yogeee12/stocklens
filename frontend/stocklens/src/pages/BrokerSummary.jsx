@@ -4,6 +4,12 @@ import Header from "../components/header"
 
 function BrokerSummary(){
     const [brokers, SetBrokers] = useState([])
+    const [open, setOpen] = useState(false)
+    const [selectedBroker, setSelectedBroker] = useState(null)
+
+    const sortedBrokers = [...brokers]
+        .filter( brokers => brokers.active_recommendations > 0 )
+        .sort((a, b) => new Date(b.last_recommendation_date) - new Date(a.last_recommendation_date))
 
     useEffect(() =>  {
         async function loadBrokers(){
@@ -12,14 +18,14 @@ function BrokerSummary(){
         }
         loadBrokers()
     }, [])
-    
+
     return(
         <div>
             <Header />
             <h1>Broker Summary</h1>
 
             <table>
-                <thead>
+                <thead> 
                     <tr>
                     <th>Broker</th>
                     <th>Total recommendations</th>
@@ -34,8 +40,8 @@ function BrokerSummary(){
                     <th>Last Recommendation Date</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {brokers.map(broker => (
+                <tbody >
+                    {sortedBrokers.map(broker => (
                         <tr key={broker.broker_id}>
                             <td>{broker.broker_name}</td>
                             <td>{broker.total_recommendations}</td>
@@ -48,9 +54,46 @@ function BrokerSummary(){
                             <td>%{broker.positive_ratio}</td>
                             <td>%{broker.success_ratio}</td>
                             <td>{broker.last_recommendation_date || "-"}</td>
+                            <td>
+                            <span className="arrow" onClick={() => 
+                            setSelectedBroker(selectedBroker === broker.broker_id 
+                                ? null 
+                                : broker.broker_id)>
+                                setOpen(!open)}>
+                                {open ? "▲" : "▼"}
+                            </span>
+                            </td>
                         </tr>
                     ))}
-                </tbody>
+                </tbody >
+                    {open &&
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Company</th>
+                                    <th>Call Type</th>
+                                    <th>Current Price</th>
+                                    <th>Target Price</th>   
+                                    <th>Upside</th>
+                                    <th>Change Since Reco</th>
+                                    <th>Reco Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {sortedBrokers?.company_list?.map((company, index) =>
+                                    <tr key={index}>
+                                        <td>{company.company_name}</td>
+                                        <td>{company.call_type}</td>
+                                        <td>₹{company.current_price}</td>
+                                        <td>₹{company.target_price}</td>
+                                        <td>{company.upside}%</td>
+                                        <td>{company.change_since_reco}%</td>
+                                        <td>{company.reco_date}</td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    }
             </table>
         </div>
     )
