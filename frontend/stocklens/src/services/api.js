@@ -5,15 +5,6 @@
     return res.json();
   }
   
-  export async function getRecommendations(symbol){
-    const res = await fetch(`${API}/companies/${symbol}/recommendations`);
-    return res.json();
-  }
-  
-  export async function getSummary(symbol){
-    const res = await fetch(`${API}/companies/${symbol}/summary`);
-    return res.json();
-  }
   export async function getAllSummary(){
     const res = await fetch(`${API}/summary`);
     return res.json();
