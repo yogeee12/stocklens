@@ -25,8 +25,10 @@ function BrokerSummary(){
     return(
         <div>
             <Header />
-            <BrokerSidebar brokers={brokers} onSelectBroker={setSelectedBroker} />
+            <div className="broker-layout">
+            <BrokerSidebar brokers={sortedBrokers} onSelectBroker={setSelectedBroker} />
             <BrokerProfile broker={selectedBroker}/>
+            </div>
         </div>
     )
 }

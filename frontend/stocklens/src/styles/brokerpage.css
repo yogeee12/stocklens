@@ -1,8 +1,17 @@
+.broker-layout{
+    display: flex;
+    height: calc(100vh - 90px);
+}
+
 .sidebar{
     width: 300px;
+    height: calc(100vh - 90px);
     margin: 10px 0px 0px 0px;
+    flex-shrink: 0;
+    top: 90px;
     padding: 10px;
-    position: fixed;
+    flex-shrink: 0;
+    position: sticky;
     align-items: left;
     justify-content: left;
     text-align: left;
@@ -36,3 +45,72 @@
 }
 
 
+/* Broker profile */
+.broker-profile{
+    flex: 1;
+    width: auto;
+    padding: 25px;
+}
+
+.broker-title{
+    align-items: left;
+    justify-self: left;
+    margin: 10px 0px 10px 30px;
+    font-size: 1.5rem;
+    padding: 10px;
+}
+
+.broker-profile-boxes{
+    display: grid;
+    grid-template-columns: repeat(3, minmax(220px, 1fr));
+    gap: 20px;
+    margin: 30px 0;
+    /* align-items: center; */
+    /* justify-content: center; */
+}
+
+.broker-box{
+    background:var(--bg);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+}
+
+.broker-box:hover{
+    transform:translateY(-3px);
+}
+
+.broker-box small{
+    color:var(--ink);
+    display:block;
+    margin-bottom:10px;
+}
+
+.broker-box h2{
+    margin:0;
+    font-size:2rem;
+}
+
+.broker-summary-table{
+    /* margin: 30px 40px 50px ; */
+    align-items: center;
+    justify-self: center;
+    width: 95%;
+    max-height: 500px;
+    min-height: auto;
+    background:var(--bg);
+    /* border:1px solid ar(--line); */
+    overflow: hidden;
+    overflow: auto;
+    padding: 20px 20px;
+}
+
+.broker-summary-table th{
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+}
+.broker-summary-table .company-name{
+    text-align: left;
+}
