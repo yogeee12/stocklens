@@ -245,3 +245,29 @@ def get_broker_summary():
     
     finally:
         db.close()
+
+@app.get('/broker/common/{broker_ids}')
+def get_broker_ids(broker_ids):
+
+    db = SessionLocal()
+
+    brokers = db.query(Brokers)
+
+    recommendation = (
+        db.query(Recommendation)
+        .filter(Recommendation.upside is not None)
+        .all()
+    )
+
+    broker_ids = list(broker_ids)
+    result = []
+
+    for reco in recommendation:
+        if reco.broker_id in broker_ids:
+
+            result.append({
+                # "company_name" : reco.c
+            })
+
+
+    
