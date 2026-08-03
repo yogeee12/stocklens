@@ -130,6 +130,11 @@ def get_company_cards():
                     "change_at_reco": reco.change_at_reco if reco else None
             })
 
+
+        lower_changes = [reco.change_at_reco for reco in latest_reco if reco.change_at_reco is None or reco.change_at_reco < -30]
+        if lower_changes:
+            continue
+
         upside_dic = {
             "avg_buy_upside" : summary.avg_buy_upside,
             "avg_hold_upside" : summary.avg_hold_upside,
