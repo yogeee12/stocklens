@@ -1,7 +1,8 @@
-import { useState ,useEffect , Fragment } from "react"
+import { useState ,useEffect } from "react"
 import { getBrokerSummary } from "../services/api"
 import Header from "../components/header"
 import BrokerSidebar from "../components/BrokerSidebar"
+import BrokerProfile from "../components/BrokerProfile"
 
 
 function BrokerSummary(){
@@ -16,6 +17,7 @@ function BrokerSummary(){
         async function loadBrokers(){
             const data = await getBrokerSummary()
             SetBrokers(data)
+            setSelectedBroker(data[0])
         }
         loadBrokers()
     }, [])
@@ -23,7 +25,8 @@ function BrokerSummary(){
     return(
         <div>
             <Header />
-            <BrokerSidebar onSelectBroker={setSelectedBroker} />
+            <BrokerSidebar brokers={brokers} onSelectBroker={setSelectedBroker} />
+            <BrokerProfile broker={selectedBroker}/>
         </div>
     )
 }

@@ -1,17 +1,6 @@
-import {useState, useEffect} from "react";
-import { getBrokerSummary } from "../services/api";
 import "../styles/brokerpage.css";
 
-function BrokerSidebar({ onSelectBroker }) {
-    const [brokers, setBrokers] = useState([]);
-
-    useEffect(() => {
-        async function loadBrokers(){
-            const data = await getBrokerSummary()
-            setBrokers(data)
-        }
-        loadBrokers()
-    }, [])
+function BrokerSidebar({ brokers ,onSelectBroker }) {
     return(
         <div className="sidebar"> 
             <h2 className="sidebar-title">Brokers</h2>
