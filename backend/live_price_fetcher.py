@@ -1,5 +1,5 @@
 import yfinance as yf 
-from model import Company, Recommendation
+from model import Company, Recommendation, Summary
 from database import SessionLocal
 import time
 from summary_generator import generate_summary
@@ -9,12 +9,12 @@ def data_gen():
     db = SessionLocal()
 
     companies = db.query(Company).all()
-
+    summary = db.query(Summary).all()
 
     for company in companies:
         recommendation = (
             db.query(Recommendation)
-            .filter(Recommendation.company_id == company.id)
+            .filter(Recommendation.company_id == Summary.company_id)
             .all()
         )
 
@@ -22,7 +22,7 @@ def data_gen():
         ticker = yf.Ticker(company.symbol+".NS")
         latest_price = ticker.fast_info["lastPrice"]
 
-        print("Updating Data of",company.id)
+        print("Updating Data of", company.symbol ,company.id)
         for reco in recommendation:
 
             if reco.upside:
