@@ -44,7 +44,6 @@
     border: 2px solid var(--line);
 }
 
-
 /* Broker profile */
 .broker-profile{
     flex: 1;
@@ -97,7 +96,7 @@
     align-items: center;
     justify-self: center;
     width: 95%;
-    max-height: 500px;
+    max-height: 400px;
     min-height: auto;
     background:var(--bg);
     /* border:1px solid ar(--line); */
