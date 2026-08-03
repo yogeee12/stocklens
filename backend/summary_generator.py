@@ -54,10 +54,6 @@ def generate_summary():
                 summary = Summary(company_id = company.id)
                 db.add(summary)
 
-            summary.buy_count = buy_count
-            summary.hold_count = hold_count
-            summary.sell_count = sell_count
-            summary.accumulate_count = accumulate_count
             summary.buy_percent = buy_percent
             summary.hold_percent = hold_percent
             summary.sell_percent = sell_percent

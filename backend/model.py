@@ -52,10 +52,6 @@ class Summary(Base):
     __tablename__ = "summary"
 
     company_id = Column(Integer, ForeignKey("companies.id"), primary_key=True, nullable=False)
-    buy_count = Column(Integer)
-    hold_count = Column(Integer)
-    sell_count = Column(Integer)
-    accumulate_count = Column(Integer)
     buy_percent = Column(Float)
     hold_percent = Column(Float)
     sell_percent = Column(Float)
