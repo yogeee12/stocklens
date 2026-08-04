@@ -9,7 +9,6 @@ def data_gen():
     db = SessionLocal()
 
     companies = db.query(Company).all()
-    summary = db.query(Summary).all()
 
     for company in companies:
         recommendation = (
@@ -18,7 +17,6 @@ def data_gen():
             .all()
         )
 
-        # symbol = [company.symbol+".NS" for company in companies]
         ticker = yf.Ticker(company.symbol+".NS")
         latest_price = ticker.fast_info["lastPrice"]
 
@@ -29,7 +27,7 @@ def data_gen():
                 target_price =  reco.target_price if reco.target_price else None
                 price_at_reco = reco.price_at_reco if reco.price_at_reco else None
 
-                reco.current_price =  round(latest_price,2)
+                reco.current_price = round(latest_price,2)
                 if target_price:
                     reco.upside = round(((target_price - latest_price) / latest_price)*100,2)
                 if price_at_reco:
