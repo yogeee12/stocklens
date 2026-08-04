@@ -206,7 +206,6 @@ def get_broker_summary():
                 .join(Company, Recommendation.company_id == Company.id)
                 .filter(
                     Recommendation.broker_id == broker.id,
-                    Recommendation.upside.isnot(None)
                     )
                 .order_by(Recommendation.recommendation_date.desc())
                 .all()
@@ -223,6 +222,7 @@ def get_broker_summary():
                     "upside" : reco.upside,
                     "change_at_reco" : reco.change_at_reco,
                     "recommendation_date" : reco.recommendation_date,
+                    "upside_status" : reco.upside_status,
                 })
                 
             result.append({
@@ -298,13 +298,3 @@ def get_broker_summary():
     
 #     finally:
 #         db.close()
-
-@app.get('/recommendations')
-def get_all_recommendations():
-
-    db = SessionLocal()
-
-    try:
-        recommendation = db.query(Recommendation).all()
-    finally:
-        db.close()        
