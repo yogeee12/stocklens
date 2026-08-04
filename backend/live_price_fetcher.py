@@ -14,7 +14,7 @@ def data_gen():
     for company in companies:
         recommendation = (
             db.query(Recommendation)
-            .filter(Recommendation.company_id == Summary.company_id)
+            .filter(Recommendation.company_id == company.id)
             .all()
         )
 

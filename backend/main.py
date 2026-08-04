@@ -298,3 +298,13 @@ def get_broker_summary():
     
 #     finally:
 #         db.close()
+
+@app.get('/recommendations')
+def get_all_recommendations():
+
+    db = SessionLocal()
+
+    try:
+        recommendation = db.query(Recommendation).all()
+    finally:
+        db.close()        
