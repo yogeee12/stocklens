@@ -4,7 +4,7 @@
     align-items: center;
     gap: 2rem;
     padding: 2rem 2rem;
-    border-bottom: 1px solid #444;
+    border-bottom: 1px solid var(--accent-border);
     border-radius: 10px;
     box-shadow: var(--shadow);
     background-color: var(--bg);

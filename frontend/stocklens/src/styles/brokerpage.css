@@ -15,7 +15,7 @@
     align-items: left;
     justify-content: left;
     text-align: left;
-    border-right: 4px solid var(--line);
+    border-right: 4px solid var(--accent-border);
 }
 
 .sidebar-title{
@@ -78,6 +78,7 @@
 
 .broker-box:hover{
     transform:translateY(-3px);
+    border-color: var(--accent);
 }
 
 .broker-box small{
@@ -92,7 +93,7 @@
 }
 
 .broker-summary-table{
-    /* margin: 30px 40px 50px ; */
+    margin: 50px 0px  ;
     align-items: center;
     justify-self: center;
     width: 95%;
