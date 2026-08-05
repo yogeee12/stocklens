@@ -246,55 +246,56 @@ def get_broker_summary():
     finally:
         db.close()
 
-# @app.get('/broker/common/{broker_ids}')
-# def get_broker_ids(broker_ids: str):
+@app.get('/broker/common/{broker_ids}')
+def get_broker_ids(broker_ids: str):
 
-#     db = SessionLocal()
-#     try:
-#         broker_ids = [int(i) for i in broker_ids.split(",")]
-#         subquery = (
-#             db.query(Recommendation.company_id)
-#             .filter(
-#                 Recommendation.broker_id.in_(broker_ids),
-#                 Recommendation.upside.isnot(None)
-#             )
-#             .group_by(Recommendation.company_id)
-#             .having(func.count(distinct(Recommendation.broker_id)) == len(broker_ids))
-#             .subquery()
-#         )
-#         query = (db.query(
-#             Company.company_name,
-#             Recommendation.broker_id,
-#             Recommendation.call_type,
-#             Recommendation.upside,
-#             Recommendation.change_at_reco,
-#             Recommendation.recommendation_date,
-#         )
-#         .join(Company, Company.id == Recommendation.company_id)
-#         .filter(
-#             Recommendation.company_id.in_(db.query(subquery.c.company_id)),
-#             Recommendation.broker_id.in_(broker_ids)
-#         )
-#         .order_by(
-#             Company.company_name,
-#             Brokers.name
-#         )
-#         .all()
-#         )
+    db = SessionLocal()
+    try:
+        broker_ids = [int(i) for i in broker_ids.split(",")]
+        subquery = (
+            db.query(Recommendation.company_id)
+            .filter(
+                Recommendation.broker_id.in_(broker_ids),
+                Recommendation.upside.isnot(None)
+            )
+            .group_by(Recommendation.company_id)
+            .having(func.count(distinct(Recommendation.broker_id)) == len(broker_ids))
+            .subquery()
+        )
+        query = (db.query(
+            Company.company_name,
+            Recommendation.broker_id,
+            Recommendation.call_type,
+            Recommendation.upside,
+            Recommendation.change_at_reco,
+            Recommendation.recommendation_date,
+        )
+        .join(Company, Company.id == Recommendation.company_id)
+        .join(Brokers, Brokers.id == Recommendation.broker_id)
+        .filter(
+            Recommendation.company_id.in_(db.query(subquery.c.company_id)),
+            Recommendation.broker_id.in_(broker_ids)
+        )
+        .order_by(
+            Company.company_name,
+            Brokers.name
+        )
+        .all()
+        )
 
-#         companies = query
-#         result = []
+        companies = query
+        result = []
 
-#         for row in companies:
-#             result.append({
-#                 "company_name" : row.company_name.replace("-"," ").title(),
-#                 "call_type" : row.call_type,
-#                 "upside" : row.upside,
-#                 "change_at_reco" : row.change_at_reco,
-#                 "recommendation_date" : row.recommendation_date,
-#             })
+        for row in companies:
+            result.append({
+                "company_name" : row.company_name.replace("-"," ").title(),
+                "call_type" : row.call_type,
+                "upside" : row.upside,
+                "change_at_reco" : row.change_at_reco,
+                "recommendation_date" : row.recommendation_date,
+            })
 
-#         return result
+        return result
     
-#     finally:
-#         db.close()
+    finally:
+        db.close()
