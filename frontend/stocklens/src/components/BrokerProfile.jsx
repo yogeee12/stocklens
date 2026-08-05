@@ -1,15 +1,14 @@
 import { useState } from "react"
 
-function BrokerProfile({ broker }){
-    
+function BrokerProfile({ broker, showFilter, setShowFilter }){  
     const [filter, setFilter] = useState("ACTIVE")
     const [nonNumeric , setNumeric] = useState(false)
     const [title , setTitle] = useState('Active Recommendations')
     
-        if(!broker){
-            return <p>Loading...</p>
-        }
-
+    if(!broker){
+        return <p>Loading...</p>
+    }
+    console.log(broker)
     const rows = broker.company_list.filter(row => {
         switch(filter){
 
@@ -41,7 +40,14 @@ function BrokerProfile({ broker }){
     
     return (
         <div className="broker-profile">
+                <div className="profile-header">
                     <h3 className="broker-title">{broker.broker_name}</h3>
+                    <div className="brokerfilter">
+                        <button className="filter=btn" onClick={() => { setShowFilter(!showFilter) }}>
+                            ≡
+                        </button>
+                    </div>
+                </div>
                     <div className="broker-profile-boxes">   
                     <div className="broker-box total-recommendation" onClick={ () => {
                         setFilter("ALL"); 
@@ -74,7 +80,7 @@ function BrokerProfile({ broker }){
                     <div className="broker-box company-in-negative" onClick={() => {
                         setFilter('NEGATIVE'); 
                         setNumeric(true);
-                        setTitle("Active Positive Recommendations");}}>
+                        setTitle("Active Negative Recommendations");}}>
                         <small className="broker-box-title">Negative</small>
                         <p className="broker-box-value">{broker.company_in_negative}</p>
                         </div>
@@ -101,8 +107,8 @@ function BrokerProfile({ broker }){
                         <p className="broker-box-value">%{broker.positive_ratio}</p>
                         </div>
                     </div>
+                    <h4 className="table-title">{title}</h4>
                     <div className="broker-summary-table">
-                    <small className="table-title">{title}</small>
                         <table>
                             <thead>
                                 <tr>
