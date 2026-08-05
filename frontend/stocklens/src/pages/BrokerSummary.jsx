@@ -1,13 +1,17 @@
 import { useState ,useEffect } from "react"
-import { getBrokerSummary } from "../services/api"
+import { getCommonCompanies, getBrokerSummary } from "../services/api"
 import Header from "../components/header"
 import BrokerSidebar from "../components/BrokerSidebar"
 import BrokerProfile from "../components/BrokerProfile"
-
+import BrokerFilter from "../components/BrokerFilter"
 
 function BrokerSummary(){
     const [brokers, SetBrokers] = useState([])
     const [selectedBroker, setSelectedBroker] = useState(null)
+    const [selectedFilters, setSelectedFilters] = useState([])
+    const [commonCompanies, setCommonCompanies] = useState([]);
+    const [showFilter, setShowFilter] = useState(false);
+
 
     const sortedBrokers = [...brokers]
         .filter( brokers => brokers.active_recommendations > 0 )
@@ -22,12 +26,33 @@ function BrokerSummary(){
         loadBrokers()
     }, [])
 
+    useEffect(() => {
+
+        if(selectedFilters.length < 2)
+            return;
+        async function load(){
+            const data = await getCommonCompanies(selectedFilters)
+            setCommonCompanies(data)
+        }
+        load();
+    },[selectedFilters])
+    async function loadCommonCompanies(ids) {
+    const data = await getCommonCompanies(ids);
+
+    setCommonCompanies(data);
+}
+
     return(
         <div>
             <Header />
             <div className="broker-layout">
             <BrokerSidebar brokers={sortedBrokers} onSelectBroker={setSelectedBroker} />
-            <BrokerProfile broker={selectedBroker}/>
+            <BrokerProfile broker={selectedBroker} showFilter={showFilter} setShowFilter={setShowFilter}/>
+            {showFilter && 
+            <BrokerFilter brokers={sortedBrokers} 
+                selectedFilters={selectedFilters}
+                setSelectedFilters={setSelectedFilters} 
+                onCompare={loadCommonCompanies}/>}
             </div>
         </div>
     )
