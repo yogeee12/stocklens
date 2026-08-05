@@ -100,7 +100,7 @@ function BrokerProfile({ broker }){
                                     <td>{company.call_type}</td>
                                     <td>₹{company.current_price}</td>
                                     <td>₹{company.target_price}</td>
-                                    <td>{nonNumeric === true 
+                                    <td>{nonNumeric === true
                                             ? company.upside
                                             : company.upside_status
                                         }</td>
