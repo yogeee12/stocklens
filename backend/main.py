@@ -264,6 +264,7 @@ def get_broker_ids(broker_ids: str):
         )
         query = (db.query(
             Company.company_name,
+            Brokers.name.label("broker_name"),
             Recommendation.broker_id,
             Recommendation.call_type,
             Recommendation.upside,
@@ -289,6 +290,7 @@ def get_broker_ids(broker_ids: str):
         for row in companies:
             result.append({
                 "company_name" : row.company_name.replace("-"," ").title(),
+                "broker_name" : row.broker_name,
                 "call_type" : row.call_type,
                 "upside" : row.upside,
                 "change_at_reco" : row.change_at_reco,
