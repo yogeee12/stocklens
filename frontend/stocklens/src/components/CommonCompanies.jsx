@@ -107,7 +107,7 @@ function CommonCompanies({ companies }){
                     <div className="broker-box pre-bonus-split" onClick={() => {
                         setFilter('LATEST'); 
                         setNumeric(false);
-                        setTitle("Recommendations Pre-Bonus/Split");}}>
+                        setTitle("Latest Recommendations");}}>
                         <small className="broker-box-title">Latest Recommendations</small>
                         <p className="broker-box-value">{latestRecommendations.length}</p>
                         </div>
