@@ -26,33 +26,29 @@ function BrokerSummary(){
         loadBrokers()
     }, [])
 
-    useEffect(() => {
+   async function handleCompare(){
 
-        if(selectedFilters.length < 2)
+        if(selectedFilters.length < 2){
+            alert("Select at least 2 brokers");
             return;
-        async function load(){
-            const data = await getCommonCompanies(selectedFilters)
-            setCommonCompanies(data)
         }
-        load();
-    },[selectedFilters])
-    async function loadCommonCompanies(ids) {
-    const data = await getCommonCompanies(ids);
 
-    setCommonCompanies(data);
-}
+        const data = await getCommonCompanies(selectedFilters);
+        setCommonCompanies(data);
+    }
+    console.log(handleCompare)
 
     return(
         <div>
             <Header />
             <div className="broker-layout">
             <BrokerSidebar brokers={sortedBrokers} onSelectBroker={setSelectedBroker} />
-            <BrokerProfile broker={selectedBroker} showFilter={showFilter} setShowFilter={setShowFilter}/>
+            <BrokerProfile broker={selectedBroker} showFilter={showFilter} setShowFilter={setShowFilter} commonCompany={commonCompanies}/>
             {showFilter && 
             <BrokerFilter brokers={sortedBrokers} 
                 selectedFilters={selectedFilters}
                 setSelectedFilters={setSelectedFilters} 
-                onCompare={loadCommonCompanies}/>}
+                onCompare={handleCompare}/>}
             </div>
         </div>
     )

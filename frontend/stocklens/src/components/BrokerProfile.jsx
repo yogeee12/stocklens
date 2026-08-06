@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-function BrokerProfile({ broker, showFilter, setShowFilter }){  
+function BrokerProfile({ broker, showFilter, setShowFilter, commonCompany }){  
     const [filter, setFilter] = useState("ACTIVE")
     const [nonNumeric , setNumeric] = useState(false)
     const [title , setTitle] = useState('Active Recommendations')
@@ -37,17 +37,18 @@ function BrokerProfile({ broker, showFilter, setShowFilter }){
                 return true
         }
     })
-    
+        console.log(commonCompany)
     return (
         <div className="broker-profile">
                 <div className="profile-header">
-                    <h3 className="broker-title">{broker.broker_name}</h3>
+                    {commonCompany.length === 0 &&<h3 className="broker-title">{broker.broker_name}</h3>}
                     <div className="brokerfilter">
                         <button className="filter=btn" onClick={() => { setShowFilter(!showFilter) }}>
                             ≡
                         </button>
                     </div>
                 </div>
+            {commonCompany.length === 0 && 
                     <div className="broker-profile-boxes">   
                     <div className="broker-box total-recommendation" onClick={ () => {
                         setFilter("ALL"); 
@@ -107,6 +108,9 @@ function BrokerProfile({ broker, showFilter, setShowFilter }){
                         <p className="broker-box-value">%{broker.positive_ratio}</p>
                         </div>
                     </div>
+                    }
+                    {commonCompany.length === 0 && ( 
+                    <div>
                     <h4 className="table-title">{title}</h4>
                     <div className="broker-summary-table">
                         <table>
@@ -138,7 +142,25 @@ function BrokerProfile({ broker, showFilter, setShowFilter }){
                                 )}
                             </tbody>
                         </table>
-                </div>
+                        </div>
+                        </div>
+                        )}
+                        {commonCompany.length !== 0 && (
+                            <div className="common-company-table">
+                        <h3>Common Recommendations</h3>
+                        <div></div>
+                        <table>
+                        <thead>
+                        <tr>
+                        <th>Company</th>
+                        {/* dynamic broker names */}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        </table>
+                        </div>
+                        )}
         </div>
     )
 }

@@ -21,7 +21,7 @@ function BrokerFilter({brokers, selectedFilters, setSelectedFilters, onCompare})
         return;
     }
 
-    onCompare(selectedFilters);
+    onCompare();
     }
     console.log(selectedFilters)
     return (

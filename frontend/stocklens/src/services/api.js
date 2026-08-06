@@ -20,6 +20,6 @@
   }
 
   export async function getCommonCompanies(broker_ids){
-    const res = await fetch(`/broker/common/${broker_ids}`)
+    const res = await fetch(`${API}/broker/common/${broker_ids}`)
     return res.json()
   }
