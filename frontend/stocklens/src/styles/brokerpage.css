@@ -100,10 +100,11 @@
     max-height: 400px;
     min-height: auto;
     background:var(--bg);
-    /* border:1px solid ar(--line); */
     overflow: hidden;
     overflow: auto;
     padding: 10px 10px;
+    border-top: 2px solid var(--line);
+    border-bottom: 2px solid var(--line);
 }
 
 .broker-summary-table th{
@@ -123,6 +124,7 @@
     padding: 10px;
     font-size: 0.9rem;
 }
+
 .profile-header{
     width: 100%;
     display: flex;
