@@ -11,7 +11,23 @@ function CommonCompanies({ companies }){
     const targetMet = companies.filter(r => r.upside_status === "Target met").length
     const bonusSplit = companies.filter(r => r.upside_status === "Pre-Bonus/Split").length
     const expired = companies.filter(r => r.upside_status === "").length
-    const latestrecommendations = companies.map(r => r.recommendation_date).sort().reverse()[0];
+    const latestRecommendations = Object.values(
+
+    companies.reduce((acc, row) => {
+
+        if (
+            !acc[row.broker_id] ||
+            new Date(row.recommendation_date) >
+            new Date(acc[row.broker_id].recommendation_date)
+        ) {
+            acc[row.broker_id] = row;
+        }
+
+        return acc;
+
+        }, {})
+
+    );
 
     const rows = companies.filter(row => {
         switch(filter){
@@ -19,8 +35,13 @@ function CommonCompanies({ companies }){
             case "ALL":
                 return row.upside_status
             
-            // case "LATEST":
-            //     return rows.latestrecommendations
+            case "LATEST":
+                return latestRecommendations.some(
+            latest =>
+            latest.broker_id === row.broker_id &&
+            latest.company_id === row.company_id &&
+            latest.recommendation_date === row.recommendation_date
+    );
 
             case "ACTIVE":
                 return typeof row.upside === "number"
@@ -83,7 +104,15 @@ function CommonCompanies({ companies }){
                         <small className="broker-box-title">Pre-Bonus/Split</small>
                         <p className="broker-box-value">{bonusSplit}</p>
                         </div>
+                    <div className="broker-box pre-bonus-split" onClick={() => {
+                        setFilter('LATEST'); 
+                        setNumeric(false);
+                        setTitle("Recommendations Pre-Bonus/Split");}}>
+                        <small className="broker-box-title">Latest Recommendations</small>
+                        <p className="broker-box-value">{latestRecommendations.length}</p>
+                        </div>
                     </div>
+            <h4 className="table-title">{title}</h4>
             <div className="common-profile-tabel broker-summary-table">
                 <table>
                     <thead>
