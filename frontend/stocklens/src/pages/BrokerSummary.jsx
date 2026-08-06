@@ -48,7 +48,8 @@ function BrokerSummary(){
             <BrokerFilter brokers={sortedBrokers} 
                 selectedFilters={selectedFilters}
                 setSelectedFilters={setSelectedFilters} 
-                onCompare={handleCompare}/>}
+                onCompare={handleCompare}
+                setShowFilter={setShowFilter}/>}
             </div>
         </div>
     )

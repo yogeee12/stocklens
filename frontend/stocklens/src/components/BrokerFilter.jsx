@@ -1,5 +1,5 @@
 
-function BrokerFilter({brokers, selectedFilters, setSelectedFilters, onCompare}){
+function BrokerFilter({brokers, selectedFilters, setSelectedFilters, onCompare, setShowFilter}){
 
     function toggleBroker(id){
 
@@ -27,8 +27,6 @@ function BrokerFilter({brokers, selectedFilters, setSelectedFilters, onCompare})
     return (
         <div className="broker-filter">
 
-    {/* <h3>Compare Brokers</h3> */}
-
     <div className="broker-list">
 
         {brokers.map(broker => (
@@ -39,6 +37,10 @@ function BrokerFilter({brokers, selectedFilters, setSelectedFilters, onCompare})
                 <input
                     type="checkbox"
                     checked={selectedFilters.includes(broker.broker_id)}
+                    disabled={
+                        selectedFilters.length >= 5 &&
+                        !selectedFilters.includes(broker.broker_id)
+                    }
                     onChange={() => toggleBroker(broker.broker_id)}
                 />
 
@@ -51,8 +53,10 @@ function BrokerFilter({brokers, selectedFilters, setSelectedFilters, onCompare})
 
     <button
         className="compare-btn"
-        onClick={compare}
-    >
+        onClick={() => {
+            compare();
+            setShowFilter(false);
+        }}>
         Apply
     </button>
 

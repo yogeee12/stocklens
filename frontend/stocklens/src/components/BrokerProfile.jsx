@@ -1,4 +1,5 @@
 import { useState } from "react"
+import CommonCompanies from "./CommonCompanies"
 
 function BrokerProfile({ broker, showFilter, setShowFilter, commonCompany }){  
     const [filter, setFilter] = useState("ACTIVE")
@@ -49,7 +50,7 @@ function BrokerProfile({ broker, showFilter, setShowFilter, commonCompany }){
                     </div>
                 </div>
             {commonCompany.length === 0 && 
-                    <div className="broker-profile-boxes">   
+                    <div className="broker-profile-boxes">
                     <div className="broker-box total-recommendation" onClick={ () => {
                         setFilter("ALL"); 
                         setNumeric(false);
@@ -145,23 +146,8 @@ function BrokerProfile({ broker, showFilter, setShowFilter, commonCompany }){
                         </div>
                         </div>
                         )}
-                        {commonCompany.length !== 0 && (
-                            <div className="common-company-table">
-                        <h3>Common Recommendations</h3>
-                        <div></div>
-                        <table>
-                        <thead>
-                        <tr>
-                        <th>Company</th>
-                        {/* dynamic broker names */}
-                        </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                        </table>
-                        </div>
-                        )}
-        </div>
+                        {commonCompany.length > 0 && <CommonCompanies companies={commonCompany}/>}
+            </div>
     )
 }
 
