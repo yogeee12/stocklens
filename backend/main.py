@@ -276,7 +276,7 @@ def get_broker_ids(broker_ids: str):
         .join(Company, Company.id == Recommendation.company_id)
         .join(Brokers, Brokers.id == Recommendation.broker_id)
         .filter(
-            Recommendation.company_id.in_(db.query(subquery.c.company_id)),
+            Recommendation.company_id.in_(subquery),
             Recommendation.broker_id.in_(broker_ids)
         )
         .order_by(
@@ -300,9 +300,7 @@ def get_broker_ids(broker_ids: str):
                 "change_at_reco" : row.change_at_reco,
                 "recommendation_date" : row.recommendation_date,
                 "target_price" : row.target_price,
-            })
-
-        
+            })        
 
         return result
     
