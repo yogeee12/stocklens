@@ -268,8 +268,11 @@ def get_broker_ids(broker_ids: str):
             Recommendation.broker_id,
             Recommendation.call_type,
             Recommendation.upside,
+            Recommendation.upside_status,
             Recommendation.change_at_reco,
             Recommendation.recommendation_date,
+            Recommendation.current_price,
+            Recommendation.target_price,
         )
         .join(Company, Company.id == Recommendation.company_id)
         .join(Brokers, Brokers.id == Recommendation.broker_id)
@@ -286,16 +289,21 @@ def get_broker_ids(broker_ids: str):
 
         companies = query
         result = []
-
         for row in companies:
             result.append({
+                "broker_id" : row.broker_id,
                 "company_name" : row.company_name.replace("-"," ").title(),
                 "broker_name" : row.broker_name,
                 "call_type" : row.call_type,
+                "current_price" : row.current_price,
+                "upside_status" : row.upside_status,
                 "upside" : row.upside,
                 "change_at_reco" : row.change_at_reco,
                 "recommendation_date" : row.recommendation_date,
+                "target_price" : row.target_price,
             })
+
+        
 
         return result
     
