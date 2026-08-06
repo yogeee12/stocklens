@@ -256,7 +256,6 @@ def get_broker_ids(broker_ids: str):
             db.query(Recommendation.company_id)
             .filter(
                 Recommendation.broker_id.in_(broker_ids),
-                Recommendation.upside.isnot(None)
             )
             .group_by(Recommendation.company_id)
             .having(func.count(distinct(Recommendation.broker_id)) == len(broker_ids))
