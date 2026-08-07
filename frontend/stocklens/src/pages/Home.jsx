@@ -91,12 +91,8 @@ function Home(){
         <Header companies={companies} error={error} onSelectedSymbol={handleCompanySelect}/>        
       </div>
       <div className="profile-layout">
-        <div> 
           <CategorySidebar category={category} setCategory={handleCategoryChange}/>
-        </div>
-        <div>
           <CategoryProfile category={category} summary={sortedCompanies} />
-        </div>
       </div>
       </div>
   )
