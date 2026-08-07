@@ -65,9 +65,9 @@ function CategoryProfile({ category, summary}){
                         {summary.map(company =>
                             <tr key={company.company_id}>
                             <td>{company.company_name ?? '-'}</td>
-                            <td>{company.recommendations.map(r => r.current_price)[0]}</td>
-                            <td>{getPerValue(company) ?? '-'}</td>
-                            <td>{getAvgValue(company) ?? '-'}</td>
+                            <td>₹{company.recommendations.map(r => r.current_price)[0]}</td>
+                            <td>%{getPerValue(company) ?? '-'}</td>
+                            <td>%{getAvgValue(company) ?? '-'}</td>
                             <td>{company.recommendations.map(r => r.date)[0]}</td>
                             <td>{company.recommendations.map(r => r.broker)[0]}</td>
                         </tr>
