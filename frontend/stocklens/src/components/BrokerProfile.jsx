@@ -42,7 +42,7 @@ function BrokerProfile({ broker, showFilter, setShowFilter, commonCompany }){
     return (
         <div className="broker-profile">
                 <div className="profile-header">
-                    {commonCompany.length === 0 &&<h3 className="broker-title">{broker.broker_name}</h3>}
+                    {commonCompany.length === 0 &&<h3 className="profile-title broker-title">{broker.broker_name}</h3>}
                     <div className="brokerfilter">
                         <button className="filter=btn" onClick={() => { setShowFilter(!showFilter) }}>
                             ≡
@@ -50,63 +50,63 @@ function BrokerProfile({ broker, showFilter, setShowFilter, commonCompany }){
                     </div>
                 </div>
             {commonCompany.length === 0 && 
-                    <div className="broker-profile-boxes">
-                    <div className="broker-box total-recommendation" onClick={ () => {
+                    <div className="broker-profile-boxes profile-boxes">
+                    <div className="broker-box total-recommendation profile-box" onClick={ () => {
                         setFilter("ALL"); 
                         setNumeric(false);
                         setTitle('Total Recommendations');}}>
-                        <small className="broker-box-title">Total Reommendation</small>
-                        <p className="broker-box-value">{broker.total_recommendations}</p>
+                        <small className="broker-box-title profile-box-title">Total Reommendation</small>
+                        <p className="broker-box-value profile-box-value">{broker.total_recommendations}</p>
                         </div>
-                    <div className="broker-box active_recommendations " onClick={() => {
+                    <div className="broker-box active_recommendations profile-box" onClick={() => {
                         setFilter('ACTIVE'); 
                         setNumeric(true);
                         setTitle("Active Recommendations")}}>
-                        <small className="broker-box-title">Active Recommendations</small>
-                        <p className="broker-box-value">{broker.active_recommendations}</p>
+                        <small className="broker-box-title profile-box-title">Active Recommendations</small>
+                        <p className="broker-box-value profile-box-value">{broker.active_recommendations}</p>
                         </div>
-                    <div className="broker-box expired" onClick={() => {
+                    <div className="broker-box expired profile-box" onClick={() => {
                         setFilter('EXPIRED'); 
                         setNumeric(false); 
                         setTitle("Recommedations with no values");}}>
-                        <small className="broker-box-title">Expired</small>
-                        <p className="broker-box-value">{broker.expired}</p>
+                        <small className="broker-box-title profile-box-title">Expired</small>
+                        <p className="broker-box-value profile-box-value">{broker.expired}</p>
                         </div>
-                    <div className="broker-box company-in-positive" onClick={() => {
+                    <div className="broker-box company-in-positive profile-box" onClick={() => {
                         setFilter('POSITIVE'); 
                         setNumeric(true);
                         setTitle("Active Positive Recommendations")}}>
-                        <small className="broker-box-title">Positive</small>
-                        <p className="broker-box-value">{broker.company_in_positive}</p>
+                        <small className="broker-box-title profile-box-title">Positive</small>
+                        <p className="broker-box-value profile-box-value">{broker.company_in_positive}</p>
                         </div>
-                    <div className="broker-box company-in-negative" onClick={() => {
+                    <div className="broker-box company-in-negative profile-box" onClick={() => {
                         setFilter('NEGATIVE'); 
                         setNumeric(true);
                         setTitle("Active Negative Recommendations");}}>
-                        <small className="broker-box-title">Negative</small>
-                        <p className="broker-box-value">{broker.company_in_negative}</p>
+                        <small className="broker-box-title profile-box-title">Negative</small>
+                        <p className="broker-box-value profile-box-value">{broker.company_in_negative}</p>
                         </div>
-                    <div className="broker-box target-met" onClick={() => {
+                    <div className="broker-box target-met profile-box" onClick={() => {
                         setFilter('TARGET_MET'); 
                         setNumeric(false);
                         setTitle("Recommendations Target Met");}}>
-                        <small className="broker-box-title">Target Met</small>
-                        <p className="broker-box-value">{broker.target_met}</p>
+                        <small className="broker-box-title profile-box-title">Target Met</small>
+                        <p className="broker-box-value profile-box-value">{broker.target_met}</p>
                         </div>
-                    <div className="broker-box pre-bonus-split" onClick={() => {
+                    <div className="broker-box pre-bonus-split profile-box" onClick={() => {
                         setFilter('BONUS_SPLIT'); 
                         setNumeric(false);
                         setTitle("Recommendations Pre-Bonus/Split");}}>
-                        <small className="broker-box-title">Pre-Bonus/Split</small>
-                        <p className="broker-box-value">{broker.bonus_split}</p>
+                        <small className="broker-box-title profile-box-title">Pre-Bonus/Split</small>
+                        <p className="broker-box-value profile-box-value">{broker.bonus_split}</p>
                         </div>
-                    <div className="broker-box success-ratio">
-                        <small className="broker-box-title ">Success Perc.</small>
-                        <p className="broker-box-value">%{broker.success_ratio}</p>
+                    <div className="broker-box success-ratio profile-box">
+                        <small className="broker-box-title profile-box-title">Success Perc.</small>
+                        <p className="broker-box-value profile-box-value">%{broker.success_ratio}</p>
                         </div>
-                    <div className="broker-box positive-ratio">
-                        <small className="broker-box-title">Positive Perc.</small>
-                        <p className="broker-box-value">%{broker.positive_ratio}</p>
+                    <div className="broker-box positive-ratio profile-box">
+                        <small className="broker-box-title profile-box-title">Positive Perc.</small>
+                        <p className="broker-box-value profile-box-value">%{broker.positive_ratio}</p>
                         </div>
                     </div>
                     }

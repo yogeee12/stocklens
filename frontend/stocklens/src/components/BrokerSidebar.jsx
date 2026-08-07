@@ -1,4 +1,5 @@
 import "../styles/brokerpage.css";
+import "../styles/sidebar.css"
 
 function BrokerSidebar({ brokers ,onSelectBroker }) {
     return(

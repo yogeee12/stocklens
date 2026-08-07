@@ -3,47 +3,6 @@
     height: calc(100vh - 90px);
 }
 
-.sidebar{
-    width: 300px;
-    height: calc(100vh - 90px);
-    margin: 10px 0px 0px 0px;
-    flex-shrink: 0;
-    top: 90px;
-    padding: 10px;
-    flex-shrink: 0;
-    position: sticky;
-    align-items: left;
-    justify-content: left;
-    text-align: left;
-    border-right: 4px solid var(--accent-border);
-}
-
-.sidebar-title{
-    color: var(--ink-h);
-    margin: 5px 5px 10px 20px;
-    padding: 10px;
-}
-.sidebar-item{
-    padding: 2px 5px 2px 5px;
-    font-family: var(--mono);
-    list-style-type: none;
-    color: var(--ink);
-}
-.sidebar-content{
-    height: 900px;
-    margin: 0px;
-    padding: 0px;
-    align-items: left;
-    justify-content: left;
-    text-align: left;
-    overflow: auto;
-}
-.sidebar-item:hover{
-    color: var(--ink);    
-    cursor: pointer;
-    border: 2px solid var(--line);
-}
-
 /* Broker profile */
 .broker-profile{
     flex: 1;
@@ -113,6 +72,7 @@
     position: sticky;
     padding: 0px 10px 10px 10px;
 }
+
 .broker-summary-table .company-name{
     text-align: left;
 }
