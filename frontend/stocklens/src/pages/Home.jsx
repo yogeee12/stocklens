@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { getCards, getCompanies } from "../services/api";
-import CategoryCards from "../components/CategoryCards";
-import CompanyCards from "../components/CompanyCards";
-import Pagination from "../components/Pagination";
+import CategorySidebar from "../components/CategorySidebar";
+import CategoryProfile from "../components/CategoryProfile";
 import Header from "../components/header";
 import "../styles/category.css"
 import "../styles/cards.css"
+import "../styles/companyprofile.css"
 
 function Home(){
   const [companies, setCompanies] = useState([])
@@ -13,8 +13,7 @@ function Home(){
   const [summary, setSummary] = useState([]);
   const [selectedSymbol ,setSelectedSymbol] = useState("");
   const [category, setCategory] = useState("BUY")
-  const [page, setPage] = useState(1)
-  const ITEM_PER_PAGE = 10
+
   let sortedCompanies = [];
   
   if(category === "BUY"){
@@ -39,24 +38,8 @@ function Home(){
       sortedCompanies = [...summary]
           .filter(company => company.category === "ACCUMULATE")
           .sort((a,b)=> b.avg_accumulate_upside - a.avg_accumulate_upside)}
-
-  const start = (page-1) * ITEM_PER_PAGE
-  const end   = start + ITEM_PER_PAGE
-  const filteredCompanies = sortedCompanies.slice(start, end)
     
-  const searchedCompany = summary.find(
-    company => company.symbol === selectedSymbol
-  )
-  console.log(searchedCompany)
-  const displayCompanies = 
-        searchedCompany
-          ? [searchedCompany]
-          : filteredCompanies;
-
-  const totalPages = Math.ceil(
-    sortedCompanies.length / ITEM_PER_PAGE
-  )
-
+  
   function handleCompanySelect(symbol){
 
       setSelectedSymbol(symbol);
@@ -65,9 +48,7 @@ function Home(){
           company => company.symbol === symbol
       );
 
-       console.log("Found company:", company);
       if(!company) return;
-      console.log("Backend category:", company.category);
       setCategory(company.category);
   }
 
@@ -75,10 +56,6 @@ function Home(){
       setSelectedSymbol("");
       setCategory(newCategory);
   }
-
-  useEffect(() => {
-      setPage(1);
-    }, [category]);
 
   useEffect(() => {
       async function loadCompanies() {
@@ -107,36 +84,20 @@ function Home(){
   useEffect(() => {
     console.log("Selected Symbol:", selectedSymbol);
   }, [selectedSymbol]);
-  console.log(searchedCompany?.category);
-  console.log(searchedCompany);
 
   return(
     <div>
       <div>
         <Header companies={companies} error={error} onSelectedSymbol={handleCompanySelect}/>        
       </div>
-      <div className="hero-section"> 
-        <CategoryCards 
-        category={category}
-        setCategory={handleCategoryChange}
-        />
+      <div className="profile-layout">
+        <div> 
+          <CategorySidebar category={category} setCategory={handleCategoryChange}/>
+        </div>
+        <div>
+          <CategoryProfile category={category} summary={sortedCompanies} />
+        </div>
       </div>
-        <>{!searchedCompany &&
-         <Pagination page={page} setPage={setPage} totalPages={totalPages}/>}</>
-      <div className="company-cards">
-        {
-          displayCompanies.map((company)=>(
-            <CompanyCards
-            key={company.company_id}
-            summary={company}
-            recommendations={company.recommendations}
-            category={category}
-            />
-          ))
-        }
-      </div>
-        <>{!searchedCompany && 
-        <Pagination page={page} setPage={setPage} totalPages={totalPages}/>}</>
       </div>
   )
 }
