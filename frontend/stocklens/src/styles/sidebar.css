@@ -1,6 +1,5 @@
 .sidebar{
     width: 300px;
-    height: calc(100vh - 90px);
     margin: 10px 0px 0px 0px;
     flex-shrink: 0;
     top: 90px;
@@ -11,6 +10,8 @@
     justify-content: left;
     text-align: left;
     border-right: 4px solid var(--accent-border);
+    flex: 0 0 300px;
+    height: calc(100vh - 90px);
 }
 
 .sidebar-title{
@@ -25,7 +26,7 @@
     color: var(--ink);
 }
 .sidebar-content{
-    height: 900px;
+    height: 500px;
     margin: 0px;
     padding: 0px;
     align-items: left;
